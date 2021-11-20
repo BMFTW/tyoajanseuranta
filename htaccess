@@ -1,0 +1,5 @@
+order deny,allow
+deny from all
+allow from 83.150.84
+allow from 195.156.62
+DirectoryIndex login.html

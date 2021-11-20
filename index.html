@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+  
+    <head>
+  
+  		<!-- Title -->
+  		<title>Työajanseuranta</title>
+  
+  		<!-- Meta -->
+    	<meta charset = "utf-8">
+  		<meta name = "viewport" content = "width = device-width, initial-scale = 1">
+  
+  		<!-- CSS -->
+  		<link rel = "stylesheet" href = "style.css">
+  		<link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  
+  		<!-- JavaScript -->
+  		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  		<script src = "vars_funs.js?v=126"></script>
+  		<script src = "index.js?v=126"></script>
+    	<script src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  		<script src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  
+  		<style>
+  
+            .group1, .group2 {
+  				margin-top: 50px;
+  				text-align: center;
+  			}
+  
+  			.toissa {
+  				margin-top: 2px !important;
+  				min-width: 350px;
+  			}
+
+			.toissa .time {
+  				margin-left: 10px;
+				float: right;
+  			}
+  
+  			.hidden {
+  				display: none;
+  			}
+  
+  		</style> 
+  
+    </head>
+
+    <body>
+  
+    	<!-- Jumbotron -->
+    	<div class = "jumbotron text-center">
+    		<img src = "logo.png">
+			<h5>Työajanseurantajärjestelmä</h5>
+			<script>document.write( getName(userID) + " - " + getDate() );</script>
+    	</div>
+  
+  		<!-- Body -->
+    	<div class = "container">
+          		
+			<!-- Töissä, lounastauko, poissa -->
+			<div class = "row group1">
+	
+				<!-- Töissä -->
+				<div class = "col-md-4 col-sm-6 col-xs-6">
+	
+					<div class = "btn-group">
+	
+						<!-- #displayed1, #arrow1 -->
+						<button type = "button" id = "displayed1" class = "btn btn-success btn-block">Töissä &nbsp;&nbsp;&nbsp; 00:00:00</button>
+						<button type = "button" id = "arrow1"     class = "btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle = "dropdown" data-flip = "false"></button>
+					
+						<!-- Dropdown menu -->
+						<div class = "dropdown-menu toissa center">
+	
+							<a class = "dropdown-item"     data-name = "Yhteensä" id = "sum"> Töissä <span class = "time"></span> </a>
+							<a class = "dropdown-item"     data-name = "Töissä">              Töissä <span class = "time"></span> </a>
+
+							<div class = "dropdown-divider"></div>
+							
+							<h5 class = "dropdown-header">Tietojärjestelmät</h5>
+							<a class = "dropdown-item" data-name = "Tietojärjestelmät - Kehitys"> Kehitys <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Tietojärjestelmät - Tuki">    Tuki    <span class = "time"></span> </a>
+	
+							<div class = "dropdown-divider"></div>
+	
+							<h5 class = "dropdown-header">LOVe</h5>
+							<a class = "dropdown-item" data-name = "LOVe - Ylläpito">         Ylläpito         <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "LOVe - Tuki">             Tuki             <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "LOVe - Sisällöntuotanto"> Sisällöntuotanto <span class = "time"></span> </a>
+	
+							<div class = "dropdown-divider"></div>
+	
+							<h5 class = "dropdown-header">Muut verkkokurssit</h5>
+							<a class = "dropdown-item" data-name = "Muut verkkokurssit - Ylläpito">         Ylläpito         <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Muut verkkokurssit - Tuki">             Tuki             <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Muut verkkokurssit - Sisällöntuotanto"> Sisällöntuotanto <span class = "time"></span> </a>
+	
+							<div class = "dropdown-divider"></div>
+	
+							<h5 class = "dropdown-header">Muut tuotteet</h5>
+							<a class = "dropdown-item" data-name = "Muut tuotteet - Kehitys"> Kehitys <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Muut tuotteet - Tuki">    Tuki    <span class = "time"></span> </a>
+	
+							<div class = "dropdown-divider"></div>
+	
+							<h5 class = "dropdown-header">Muut</h5>
+							<a class = "dropdown-item" data-name = "Yhteiset työkalut">       Yhteiset työkalut       <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Testaus">                 Testaus                 <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Nettisivut">              Nettisivut              <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Verkkoinfrastruktuuri">   Verkkoinfrastruktuuri   <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Microsoft 365">           Microsoft 365           <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Ruotsinnos">              Ruotsinnos              <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "LAS-ruotsinnos">          LAS-ruotsinnos          <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "GER-ruotsinnos">          GER-ruotsinnos          <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "NÄYTTÖ">                  NÄYTTÖ                  <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "PSYK">                    PSYK                    <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "SYTO">                    SYTO                    <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Sopimukset & tarjoukset"> Sopimukset & tarjoukset <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Sisäinen viestintä">      Sisäinen viestintä      <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Sisäiset palaverit">      Sisäiset palaverit      <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Asiakasviestintä">        Asiakasviestintä        <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Asiakaspalaverit">        Asiakaspalaverit        <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Koulutukset">             Koulutukset             <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Koulutusten valmistelu">  Koulutusten valmistelu  <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Taloushallinto">          Taloushallinto          <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Hallinnointipalvelut">    Hallinnointipalvelut    <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Henkilöstöhallinto">      Henkilöstöhallinto      <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Laatutyö">                Laatutyö                <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Laskutettava tuntityö">   Laskutettava tuntityö   <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Työmatkat">               Työmatkat               <span class = "time"></span> </a>
+	
+							<div class = "dropdown-divider"></div>
+							
+							<h5 class = "dropdown-header">Poissa</h5>
+							<a class = "dropdown-item" data-name = "Happihyppely">                           Happihyppely, 15 min  <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Palkallinen poissaolo">                  Palkallinen poissaolo <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "Liukumavähennys" id = "liukumavahennys"> Liukumavähennys       <span class = "time"></span> </a>
+	
+						</div>
+	
+					</div>
+	
+				</div>
+	
+				<br><br><br>
+	
+				<!-- Lounastauko -->
+				<div class = "col-md-4 col-sm-5 col-xs-5">
+	
+					<div class = "btn-group">
+						<button type = "button" class = "btn btn-warning lounastauko" data-name = "Lounastauko"> Lounastauko &nbsp; <span class = "time"></span> </button>
+					</div>
+	
+				</div>
+				
+				<br><br><br>
+	
+				<!-- Poissa -->
+				<div class = "col-md-4 col-sm-1 col-xs-1">
+	
+					<div class = "btn-group">
+	
+						<button type = "button" id = "displayed2" class = "btn btn-danger">Poissa</button>
+						<button type = "button" id = "arrow2"     class = "btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle = "dropdown"></button>
+					
+						<div class = "dropdown-menu poissa">
+							<a class = "dropdown-item" data-name = "Poissa"> Poissa (koko päivä, palkaton) <span><abbr title="Palkallinen poissaolo ja liukumavähennys löytyvät Töissä-valikosta">?</abbr></span> </a>
+							<a class = "dropdown-item" data-name = "Sairas"> Sairas </a>
+							<a class = "dropdown-item" data-name = "Loma">   Loma   </a>
+						</div>
+	
+				</div>
+	
+				</div>
+	
+				<br><br><br>
+	
+			</div>
+	
+			<!-- --- -->
+			<hr style = "width:40%">
+	
+			<!-- Peruuta, tilastot, tallenna -->
+			<div class = "row group2">
+
+				<div class = "col-sm-12">
+					<button type = "button" id = "cancel" class = "btn btn-danger">  Peruuta  </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type = "button" id = "stats"  class = "btn btn-dark">    Tilastot </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type = "button" id = "save"   class = "btn btn-success"> Tallenna </button>
+				</div>
+
+			</div>
+	
+			<!-- Hidden data -->
+			<div class = "row hidden">
+
+				<div class = "col-sm-12">
+					<p id = "initialize">   </p>
+					<p id = "get_timers">   </p>
+					<p id = "save_timers">  </p>
+					<p id = "delete_entry"></p>
+					<p id = "update_data">  </p>
+				</div>
+
+			</div>
+  		     
+  		</div>
+  
+    </body>
+
+</html>
