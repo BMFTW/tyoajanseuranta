@@ -588,7 +588,7 @@ function chart2($name, $day, $month, $year) {
 
 }
 
-function report($day, $month, $year, $num_work_days, $saturdays, $liukumat) {
+function report($day, $month, $year, $num_work_days, $liukumat) {
 
   global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat;
 
@@ -621,11 +621,6 @@ function report($day, $month, $year, $num_work_days, $saturdays, $liukumat) {
   $date_start = "26." . $month1 . "." . $year1;
   $date_end   = "25." . $month2 . "." . $year2;
 
-  $saturdays = explode(",", $saturdays);
-  $saturdays = preg_replace("/^/", "'", $saturdays);
-  $saturdays = preg_replace("/$/", "'", $saturdays);
-  $saturdays = implode(", ", $saturdays);
-
   // Työajat
   $sql_tyoajat = "
 
@@ -647,36 +642,46 @@ function report($day, $month, $year, $num_work_days, $saturdays, $liukumat) {
   // Poissa-, sairas- & lomalkm:t
   $sql_poissa_sairas_loma = "
 
-    SELECT 
-        TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
-    FROM 
-        ( SELECT DISTINCT nimi FROM $table ) AS TBL1
-    LEFT JOIN 
-        (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) ) AS TBL2
-    ON 
-        TBL1.nimi = TBL2.nimi
-    GROUP BY 
-        TBL1.nimi
-    ORDER BY 
-        REVERSE(SUBSTRING(REVERSE(TBL1.nimi), 0, CHARINDEX(' ', REVERSE(TBL1.nimi)))), TBL1.nimi
+  WITH 
 
-  ";
+      poissa_sairas_loma AS (
 
-  // Lomalauantait
-  $sql_la_loma = "
+        SELECT 
+          TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
+        FROM 
+          ( SELECT DISTINCT nimi FROM [master].[dbo].[tyoajanseuranta] ) AS TBL1
+        LEFT JOIN 
+          (SELECT * FROM [master].[dbo].[tyoajanseuranta] WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) ) AS TBL2
+        ON 
+          TBL1.nimi = TBL2.nimi
+        GROUP BY 
+          TBL1.nimi
 
-    SELECT 
-        TBL1.nimi, COUNT(TBL2.nimi) AS pv
-    FROM 
-        ( SELECT DISTINCT nimi FROM $table ) AS TBL1
-    LEFT JOIN 
-        ( SELECT nimi FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND pvm IN ($saturdays) AND loma = 1 ) AS TBL2
-    ON 
-        TBL1.nimi = TBL2.nimi
-    GROUP BY 
-        TBL1.nimi
-    ORDER BY 
-        REVERSE(SUBSTRING(REVERSE(TBL1.nimi), 0, CHARINDEX(' ', REVERSE(TBL1.nimi)))), TBL1.nimi
+      ), la_su_lkm AS (        
+
+        SELECT 
+          TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
+        FROM 
+          ( SELECT DISTINCT nimi FROM [master].[dbo].[tyoajanseuranta] ) AS TBL1
+        LEFT JOIN 
+          (SELECT * FROM [master].[dbo].[tyoajanseuranta] WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
+        ON 
+          TBL1.nimi = TBL2.nimi
+        GROUP BY 
+          TBL1.nimi
+
+      )
+
+  SELECT
+      TBL1.nimi, TBL1.poissa, TBL1.sairas, TBL1.loma, TBL2.poissa AS poissa_la_su, TBL2.sairas AS sairas_la_su, TBL2.loma AS loma_la_su
+  FROM 
+      poissa_sairas_loma AS TBL1
+  JOIN
+      la_su_lkm AS TBL2
+  ON
+      TBL1.nimi = TBL2.nimi
+  ORDER BY 
+      REVERSE(SUBSTRING(REVERSE(TBL1.nimi), 0, CHARINDEX(' ', REVERSE(TBL1.nimi)))), TBL1.nimi	
 
   ";
 
@@ -789,17 +794,21 @@ function report($day, $month, $year, $num_work_days, $saturdays, $liukumat) {
 
   }
 
-  $sql_data = $conn -> prepare($sql_la_loma);
-  $sql_data -> execute([$date_start, $date_end]);
-  $sql_data = $sql_data -> fetchAll();
-
   // Yhteensä
-  for ( $i = 1; $i < count($sheet1); $i++ ) {
+  $i = 1;
+
+  foreach ( $sql_data as $person ) {
 
     $nimi     = $sheet1[$i][0];
     $tyoaika  = hms_to_s($sheet1[$i][4]);
-    $sairas   = (int) $sheet1[$i][6];
-    $loma     = (int) $sheet1[$i][7];
+
+    $poissa = $person["poissa"];
+    $sairas = $person["sairas"];
+    $loma   = $person["loma"];
+
+    $poissa_la_su = $person["poissa_la_su"];
+    $sairas_la_su = $person["sairas_la_su"];
+    $loma_la_su   = $person["loma_la_su"];
 
     if ( in_array($nimi, $tuntipalkalliset) )
       $tunnit_pv = hms_to_s("00:00:00");
@@ -808,10 +817,12 @@ function report($day, $month, $year, $num_work_days, $saturdays, $liukumat) {
     else
       $tunnit_pv = hms_to_s("07:30:00");
 
-    $yhteensa = $tyoaika + $tunnit_pv * $sairas + $tunnit_pv * ( $loma - (int) $sql_data[$i-1]["pv"] );
+    $yhteensa = $tyoaika + $tunnit_pv * ( $sairas - $sairas_la_su ) + $tunnit_pv * ( $loma - $loma_la_su );
     $yhteensa = s_to_hms($yhteensa);
 
     $sheet1[$i] = array_merge($sheet1[$i], [$yhteensa]);
+
+    $i++;
 
   }
 

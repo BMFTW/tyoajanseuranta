@@ -1153,7 +1153,6 @@ $.getScript("vars_funs.js", function() {
       var end   = 25 + "." + month2 + "." + year2;
 
       var num_work_days = getDates(start, end).filter( day => !isWeekend(day) && !isHoliday(day) ).length;
-      var saturdays     = getDates(start, end).filter( date => date.getDay() == 6 && !isHoliday(date) ).map( date => date.getDate() + "." + ( date.getMonth() + 1 ) + "." + date.getFullYear() );
 
       // Liukumasaldot
       var date_start = "26.4.2021";
@@ -1227,7 +1226,7 @@ $.getScript("vars_funs.js", function() {
   
         }
 
-        $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&saturdays=" + saturdays + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
+        $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
 
           if ( day <= 25 )
             window.location.href = "download.php?file=tyotunnit_" + month + "_" + year + ".xlsx";
