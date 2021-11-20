@@ -640,53 +640,53 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   ";
 
   // Poissa-, sairas- & lomalkm:t
-  $sql_poissa_sairas_loma = "
+  $sql_poissa_sairas_loma_lkm = "
 
-  WITH 
+    WITH 
 
-      poissa_sairas_loma AS (
+        poissa_sairas_loma AS (
 
-        SELECT 
-          TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
-        FROM 
-          ( SELECT DISTINCT nimi FROM [master].[dbo].[tyoajanseuranta] ) AS TBL1
-        LEFT JOIN 
-          (SELECT * FROM [master].[dbo].[tyoajanseuranta] WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) ) AS TBL2
-        ON 
-          TBL1.nimi = TBL2.nimi
-        GROUP BY 
-          TBL1.nimi
+          SELECT 
+            TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
+          FROM 
+            ( SELECT DISTINCT nimi FROM $table ) AS TBL1
+          LEFT JOIN 
+            (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) ) AS TBL2
+          ON 
+            TBL1.nimi = TBL2.nimi
+          GROUP BY 
+            TBL1.nimi
 
-      ), la_su_lkm AS (        
+        ), la_su_lkm AS (        
 
-        SELECT 
-          TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
-        FROM 
-          ( SELECT DISTINCT nimi FROM [master].[dbo].[tyoajanseuranta] ) AS TBL1
-        LEFT JOIN 
-          (SELECT * FROM [master].[dbo].[tyoajanseuranta] WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
-        ON 
-          TBL1.nimi = TBL2.nimi
-        GROUP BY 
-          TBL1.nimi
+          SELECT 
+            TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
+          FROM 
+            ( SELECT DISTINCT nimi FROM $table ) AS TBL1
+          LEFT JOIN 
+            (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
+          ON 
+            TBL1.nimi = TBL2.nimi
+          GROUP BY 
+            TBL1.nimi
 
-      )
+        )
 
-  SELECT
-      TBL1.nimi, TBL1.poissa, TBL1.sairas, TBL1.loma, TBL2.poissa AS poissa_la_su, TBL2.sairas AS sairas_la_su, TBL2.loma AS loma_la_su
-  FROM 
-      poissa_sairas_loma AS TBL1
-  JOIN
-      la_su_lkm AS TBL2
-  ON
-      TBL1.nimi = TBL2.nimi
-  ORDER BY 
-      REVERSE(SUBSTRING(REVERSE(TBL1.nimi), 0, CHARINDEX(' ', REVERSE(TBL1.nimi)))), TBL1.nimi	
+    SELECT
+        TBL1.nimi, TBL1.poissa, TBL1.sairas, TBL1.loma, TBL2.poissa AS poissa_la_su, TBL2.sairas AS sairas_la_su, TBL2.loma AS loma_la_su
+    FROM 
+        poissa_sairas_loma AS TBL1
+    JOIN
+        la_su_lkm AS TBL2
+    ON
+        TBL1.nimi = TBL2.nimi
+    ORDER BY 
+        REVERSE(SUBSTRING(REVERSE(TBL1.nimi), 0, CHARINDEX(' ', REVERSE(TBL1.nimi)))), TBL1.nimi	
 
   ";
 
   // Poissapvm:t
-  $sql_poissa = "
+  $sql_poissa_pvm = "
 
     SELECT 
         nimi, DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv, pvm
@@ -704,7 +704,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   ";
 
   // Sairaspvm:t
-  $sql_sairas = "
+  $sql_sairas_pvm = "
 
     SELECT 
         nimi, DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv, pvm
@@ -722,7 +722,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   ";
 
   // Lomapvm:t
-  $sql_loma = "
+  $sql_loma_pvm = "
 
     SELECT 
         nimi, DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv, pvm
@@ -776,7 +776,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   }
 
   // Poissa, sairas, loma
-  $sql_data = $conn -> prepare($sql_poissa_sairas_loma);
+  $sql_data = $conn -> prepare($sql_poissa_sairas_loma_lkm);
   $sql_data -> execute([$date_start, $date_end]);
   $sql_data = $sql_data -> fetchAll();
 
@@ -852,7 +852,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
 
   $data = array();
 
-  $sql_data = $conn -> prepare($sql_poissa);
+  $sql_data = $conn -> prepare($sql_poissa_pvm);
   $sql_data -> execute([$date_start, $date_end]);
   $sql_data = $sql_data -> fetchAll();
 
@@ -887,7 +887,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
 
   $data = array();
 
-  $sql_data = $conn -> prepare($sql_sairas);
+  $sql_data = $conn -> prepare($sql_sairas_pvm);
   $sql_data -> execute([$date_start, $date_end]);
   $sql_data = $sql_data -> fetchAll();
 
@@ -922,7 +922,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
 
   $data = array();
 
-  $sql_data = $conn -> prepare($sql_loma);
+  $sql_data = $conn -> prepare($sql_loma_pvm);
   $sql_data -> execute([$date_start, $date_end]);
   $sql_data = $sql_data -> fetchAll();
 
