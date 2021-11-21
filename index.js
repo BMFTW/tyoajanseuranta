@@ -271,7 +271,7 @@ $.getScript("vars_funs.js", function () {
       // #displayed1 title
       setTimeout( () => {
 
-        var task  = $("#displayed1").html().split("&nbsp;")[0].replace("&amp;", "&");
+        var task  = $("#displayed1").html().split("&nbsp;")[0].replace("&amp;", "&").trim();
         var title = $(".dropdown-item[data-name='" + task + "']").prop("title");
 
         $("#displayed1").prop("title", title);
