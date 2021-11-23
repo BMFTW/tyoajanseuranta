@@ -651,7 +651,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
           FROM 
             ( SELECT DISTINCT nimi FROM $table ) AS TBL1
           LEFT JOIN 
-            (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) ) AS TBL2
+            (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) ) AS TBL2
           ON 
             TBL1.nimi = TBL2.nimi
           GROUP BY 
@@ -664,7 +664,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
           FROM 
             ( SELECT DISTINCT nimi FROM $table ) AS TBL1
           LEFT JOIN 
-            (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.10.2021', 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.11.2021', 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
+            (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
           ON 
             TBL1.nimi = TBL2.nimi
           GROUP BY 
@@ -777,7 +777,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
 
   // Poissa, sairas, loma
   $sql_data = $conn -> prepare($sql_poissa_sairas_loma_lkm);
-  $sql_data -> execute([$date_start, $date_end]);
+  $sql_data -> execute([$date_start, $date_end, $date_start, $date_end]);
   $sql_data = $sql_data -> fetchAll();
 
   $i = 1;
