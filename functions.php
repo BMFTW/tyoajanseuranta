@@ -588,11 +588,16 @@ function chart2($name, $day, $month, $year) {
 
 }
 
-function report($day, $month, $year, $num_work_days, $liukumat) {
+function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat;
 
   $TBL2_tyokohteet_tyoaikaaNostattavat = preg_filter("/^/", "TBL2.", $tyokohteet_tyoaikaaNostattavat);
+
+  $holidays = explode(",", $holidays);
+  $holidays = preg_filter("/^/", "'", $holidays);
+  $holidays = preg_filter("/$/", "'", $holidays);
+  $holidays = implode(",", $holidays);
 
   $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
 
@@ -663,7 +668,7 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
             TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
           FROM 
             ( SELECT DISTINCT nimi FROM $table ) AS TBL1
-          LEFT JOIN 
+          LEFT JOIN             
             (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
           ON 
             TBL1.nimi = TBL2.nimi
@@ -689,13 +694,16 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   $sql_poissa_pvm = "
 
     SELECT 
-        nimi, DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv, pvm
+        nimi,
+        DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv,
+        pvm
     FROM 
         $table
     WHERE 
         poissa = 1 AND 
         CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND 
-        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104)
+        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND
+        pvm NOT IN ($holidays)
     ORDER BY 
         REVERSE(SUBSTRING(REVERSE(nimi), 0, CHARINDEX(' ', REVERSE(nimi)))),
         nimi,
@@ -707,13 +715,16 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   $sql_sairas_pvm = "
 
     SELECT 
-        nimi, DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv, pvm
+        nimi,
+        DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv,
+        pvm
     FROM 
         $table
     WHERE 
         sairas = 1 AND 
         CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND 
-        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104)
+        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND
+        pvm NOT IN ($holidays)
     ORDER BY 
         REVERSE(SUBSTRING(REVERSE(nimi), 0, CHARINDEX(' ', REVERSE(nimi)))), 
         nimi, 
@@ -725,13 +736,16 @@ function report($day, $month, $year, $num_work_days, $liukumat) {
   $sql_loma_pvm = "
 
     SELECT 
-        nimi, DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv, pvm
+        nimi,
+        DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv,
+        pvm
     FROM 
         $table
     WHERE 
         loma = 1 AND 
         CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND 
-        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104)
+        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND
+        pvm NOT IN ($holidays)
     ORDER BY 
         REVERSE(SUBSTRING(REVERSE(nimi), 0, CHARINDEX(' ', REVERSE(nimi)))), 
         nimi, 

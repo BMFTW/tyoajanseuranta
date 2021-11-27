@@ -1226,7 +1226,7 @@ $.getScript("vars_funs.js", function() {
   
         }
 
-        $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
+        $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&holidays=" + holidays.join(",") + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
 
           if ( day <= 25 )
             window.location.href = "download.php?file=tyotunnit_" + month + "_" + year + ".xlsx";

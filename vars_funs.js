@@ -27,7 +27,9 @@ var day_today           = new Date().getDate();
 var month_today         = new Date().getMonth() + 1;
 var year_today          = new Date().getFullYear();
 
-var uniqueID             = new Date().getTime();
+var holidays            = ["1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "1.5.2021", "13.5.2021", "25.6.2021", "26.6.2021", "6.12.2021", "24.12.2021", "25.12.2021", "26.12.2021"];
+
+var uniqueID            = new Date().getTime();
 
 var green               = "#28a745";
 var yellow              = "#ffc107";
@@ -1006,12 +1008,10 @@ function isWeekend(day) {
 
 function isHoliday(day) {
 
-  var holidays = ["1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "1.5.2021", "13.5.2021", "25.6.2021", "26.6.2021", "6.12.2021", "24.12.2021", "25.12.2021", "26.12.2021"];
-
-  holidays = holidays.map( date => asDate(date) ).map( date => date.getTime() );
+  days = holidays.map( date => asDate(date) ).map( date => date.getTime() );
   day = day.getTime();
 
-  return holidays.includes(day);
+  return days.includes(day);
 
 }
 
