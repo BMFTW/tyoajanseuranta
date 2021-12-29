@@ -2,37 +2,39 @@
 var kaikki_kohteet_index = ["Yhteensä", "Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
 var kaikki_kohteet_stats = ["Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
 
-var tyontekijat         = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto", "Elina Hanslian", "Mirelle Kangas", "Otto Kontio", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Heli Rokkonen", "Emma Ruotsalainen", "Jaakko Saano", "Jarkko Wallenius"];
-var tuntipalkalliset    = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Emma Ruotsalainen", "Jaakko Saano"];
-var kuukausipalkalliset = tyontekijat.filter( tyontekija => !tuntipalkalliset.includes(tyontekija) );
+var tyontekijat          = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto", "Elina Hanslian", "Mirelle Kangas", "Otto Kontio", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Heli Rokkonen", "Emma Ruotsalainen", "Jaakko Saano", "Jarkko Wallenius"];
+var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Emma Ruotsalainen", "Jaakko Saano"];
+var kuukausipalkalliset  = tyontekijat.filter( tyontekija => !tuntipalkalliset.includes(tyontekija) );
 
-var userID              = getUrlParameter("userID");
-var userID2             = getUrlParameter("userID2");
-var person              = getUrlParameter("person");
-var day                 = getUrlParameter("day");
-var month               = getUrlParameter("month");
-var year                = getUrlParameter("year");
-var edit                = getUrlParameter("edit");
-var salary_period       = getUrlParameter("salary_period");
+var userID               = getUrlParameter("userID");
+var userID2              = getUrlParameter("userID2");
+var person               = getUrlParameter("person");
+var day                  = getUrlParameter("day");
+var month                = getUrlParameter("month");
+var year                 = getUrlParameter("year");
+var edit                 = getUrlParameter("edit");
+var salary_period        = getUrlParameter("salary_period");
 
-var userIDs             = ["594585", "3358000", "1719150", "2294025", "1776090", "2420680", "928560", "2353520", "3300695", "113515", "815775", "3559115", "913230", "2913065", "2815245"];
+var userIDs              = ["594585", "3358000", "1719150", "2294025", "1776090", "2420680", "928560", "2353520", "3300695", "113515", "815775", "3559115", "913230", "2913065", "2815245"];
 
-var user                = getName(userID);
-var user_               = getName(userID, "_");
+var user                 = getName(userID);
+var user_                = getName(userID, "_");
 
-var user2               = getName(userID2);
-var user2_              = getName(userID2, "_");
+var user2                = getName(userID2);
+var user2_               = getName(userID2, "_");
 
-var day_today           = new Date().getDate();
-var month_today         = new Date().getMonth() + 1;
-var year_today          = new Date().getFullYear();
+var day_today            = new Date().getDate();
+var month_today          = new Date().getMonth() + 1;
+var year_today           = new Date().getFullYear();
 
-var holidays            = ["1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "1.5.2021", "13.5.2021", "25.6.2021", "26.6.2021", "6.12.2021", "24.12.2021", "25.12.2021", "26.12.2021"];
+var holidays_2021        = ["1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "1.5.2021", "13.5.2021", "25.6.2021", "26.6.2021", "6.12.2021", "24.12.2021", "25.12.2021", "26.12.2021"];
+var holidays_2022        = ["6.1.2022", "15.4.2022", "18.4.2022", "26.5.2022", "6.12.2022", "26.12.2022"];
+var holidays             = holidays_2021.concat(holidays_2022);
 
-var uniqueID            = new Date().getTime();
+var uniqueID             = new Date().getTime();
 
-var green               = "#28a745";
-var yellow              = "#ffc107";
+var green                = "#28a745";
+var yellow               = "#ffc107";
 
 var users = { 
   "594585"  : "Roope Anttila",
