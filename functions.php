@@ -770,17 +770,18 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $tyoaika = $person["tyoaika"];
     $tyoaika = s_to_hms($tyoaika);
 
-    if ( in_array($nimi, $tuntipalkalliset) )
+    $tuntipalkallinen = in_array($nimi, $tuntipalkalliset);
+    $kuukausipalkallinen = !$tuntipalkallinen;
+
+    if ( $tuntipalkallinen )
       $tunnit_pv = "\0-";
-    elseif ( $nimi == "Heli Haavisto" )
-      $tunnit_pv = "07:00:00";
     else
       $tunnit_pv = "07:30:00";
 
     $pv = $num_work_days;
-    $pv = !in_array($nimi, $tuntipalkalliset) ? $num_work_days : "\0-";
+    $pv = $kuukausipalkallinen ? $num_work_days : "\0-";
 
-    $tunnit_kk = !in_array($nimi, $tuntipalkalliset) ? s_to_hms( hms_to_s($tunnit_pv) * (int) $pv ) : "\0-";
+    $tunnit_kk = $kuukausipalkallinen ? s_to_hms( hms_to_s($tunnit_pv) * (int) $pv ) : "\0-";
 
     $tunnit_pv = "\0" . $tunnit_pv;
     $pv        = "\0" . $pv;
@@ -816,6 +817,8 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $nimi     = $sheet1[$i][0];
     $tyoaika  = hms_to_s($sheet1[$i][4]);
 
+    $tuntipalkallinen = in_array($nimi, $tuntipalkalliset);
+
     $poissa = $person["poissa"];
     $sairas = $person["sairas"];
     $loma   = $person["loma"];
@@ -824,10 +827,8 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $sairas_la_su = $person["sairas_la_su"];
     $loma_la_su   = $person["loma_la_su"];
 
-    if ( in_array($nimi, $tuntipalkalliset) )
+    if ( $tuntipalkallinen  )
       $tunnit_pv = hms_to_s("00:00:00");
-    elseif ( $nimi == "Heli Haavisto" )
-      $tunnit_pv = hms_to_s("07:00:00");
     else
       $tunnit_pv = hms_to_s("07:30:00");
 
@@ -858,6 +859,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   }
 
+  // Sheet 2
   // Poissaolot
   $sheet2 = array();
 
@@ -893,6 +895,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   $sheet2 = array_merge($sheet2, $data);
 
+  // Sheet 3
   // Sairauspoissaolot
   $sheet3 = array();
 
@@ -928,6 +931,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   $sheet3 = array_merge($sheet3, $data);
 
+  // Sheet 4
   // Lomat
   $sheet4 = array();
 
@@ -963,7 +967,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   $sheet4 = array_merge($sheet4, $data);
 
-  // Excel
+  // Generate Excel file
   $xlsx = new SimpleXLSXGen();
 
   $xlsx -> addSheet( $sheet1, "Työajat" );
@@ -980,6 +984,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
 }
 
+// Convert seconds to hh:mm:ss
 function s_to_hms($input) {
 
     $h = floor( $input / 3600 );
@@ -994,6 +999,7 @@ function s_to_hms($input) {
 
 }
 
+// Convert hh:mm:ss to seconds
 function hms_to_s($input) {
 
   $hms = explode(":", $input);
