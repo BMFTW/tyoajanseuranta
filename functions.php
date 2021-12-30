@@ -54,6 +54,8 @@ $tyokohteet = [
 
 $tyokohteet_tyoaikaaNostattavat = array_filter($tyokohteet, function($value) { return $value != "lounastauko" && $value != "liukumavahennys"; } );
 
+$tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Emma Ruotsalainen", "Jaakko Saano");
+
 function getTimers($name, $date) {
 
   global $server, $db, $user, $pwd, $table, $tyokohteet;
@@ -590,7 +592,7 @@ function chart2($name, $day, $month, $year) {
 
 function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat;
+  global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat, $tuntipalkalliset;
 
   $TBL2_tyokohteet_tyoaikaaNostattavat = preg_filter("/^/", "TBL2.", $tyokohteet_tyoaikaaNostattavat);
 
@@ -755,9 +757,9 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   // Sheet 1
   $sheet1 = array();
-  array_push($sheet1, ["Nimi", "Tunnit / pv", "Pv", "Tunnit / kk", "Työaika", "Poissa", "Sairas", "Loma", "Yhteensä", "Liukumasaldo"]);
 
-  $tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Emma Ruotsalainen", "Jaakko Saano");
+  // Column names
+  array_push($sheet1, ["Nimi", "Tunnit / pv", "Pv", "Tunnit / kk", "Työaika", "Poissa", "Sairas", "Loma", "Yhteensä", "+/-", "Liukumasaldo"]);
 
   // Nimi, tunnit_pv, pv, tunnit_kk, tyoaika
   $sql_data = $conn -> prepare($sql_tyoajat);
@@ -838,6 +840,35 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $sheet1[$i] = array_merge($sheet1[$i], [$yhteensa]);
 
     $i++;
+
+  }
+
+  // +/-
+  // Yhteensä - Tunnit / kk
+  for ( $i = 1; $i < count($sheet1); $i++ ) {
+
+    // Tunnit / kk
+    $tunnit_kk = $sheet1[$i][3];
+
+    if ( $tunnit_kk == "\0-" ) {
+      $sheet1[$i] = array_merge($sheet1[$i], ["-"]);
+      continue;
+    }
+
+    $tunnit_kk = hms_to_s($tunnit_kk);
+
+    // Yhteensä
+    $yhteensa = $sheet1[$i][8];
+    $yhteensa = hms_to_s($yhteensa);
+
+    // Result
+    $result = $yhteensa - $tunnit_kk;
+    $sign   = $result >= 0 ? "+" : "-";
+    $result = abs($result);
+    $result = s_to_hms($result);
+    $result = $sign . $result;
+
+    $sheet1[$i] = array_merge($sheet1[$i], [$result]);
 
   }
 
