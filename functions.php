@@ -883,10 +883,11 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   // Siistiminen
   for ( $i = 1; $i < count($sheet1); $i++ ) {
 
-    $sheet1[$i][3] = "\0" . $sheet1[$i][3];
-    $sheet1[$i][4] = "\0" . $sheet1[$i][4];
-    $sheet1[$i][8] = "\0" . $sheet1[$i][8];
-    $sheet1[$i][9] = "\0" . $sheet1[$i][9];
+    $sheet1[$i][3]  = "\0" . $sheet1[$i][3];
+    $sheet1[$i][4]  = "\0" . $sheet1[$i][4];
+    $sheet1[$i][8]  = "\0" . $sheet1[$i][8];
+    $sheet1[$i][9]  = "\0" . $sheet1[$i][9];
+    $sheet1[$i][10] = "\0" . $sheet1[$i][10];
 
   }
 
