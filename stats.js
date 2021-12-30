@@ -1152,7 +1152,12 @@ $.getScript("vars_funs.js", function() {
       var start = 26 + "." + month1 + "." + year1;
       var end   = 25 + "." + month2 + "." + year2;
 
-      var num_work_days = getDates(start, end).filter( day => !isWeekend(day) && !isHoliday(day) ).length;
+      var is_current_salary_period = getDates(start, end).map( date => date.getTime() ).includes( asDate(day_today + "." + month_today + "." + year_today).getTime() );
+
+      if ( is_current_salary_period )
+        end = day + "." + month + "." + year;
+
+      var num_work_days = getDates(start, end).filter( day => !isWeekend(day) ).length;
 
       // Liukumasaldot
       var date_start = "26.4.2021";
