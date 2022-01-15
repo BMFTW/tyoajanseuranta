@@ -526,7 +526,8 @@ function chart2($name, $day, $month, $year) {
   $sql = "
 
     SELECT 
-        pvm, " . implode(" + ", $tyokohteet_tyoaikaaNostattavat) . " AS tyoaika
+        pvm, " . 
+        implode(" + ", $tyokohteet_tyoaikaaNostattavat) . " AS tyoaika
     FROM 
        $table
     WHERE 
@@ -542,7 +543,8 @@ function chart2($name, $day, $month, $year) {
   $sql2 = "
      
     SELECT 
-        pvm, 
+        pvm, " .
+        implode(" + ", $tyokohteet_tyoaikaaNostattavat) . " AS tyoaika,
         CASE
             WHEN poissa = 1 THEN 'poissa'
             WHEN sairas = 1 THEN 'sairas'
@@ -579,6 +581,7 @@ function chart2($name, $day, $month, $year) {
   foreach ( $result2 as $row ) {
     $day = explode(".", $row["pvm"])[0];
     $poissa_sairas_loma = $row["poissa_sairas_loma"];
+    if ( $poissa_sairas_loma == "sairas" ) $poissa_sairas_loma .= ";" . $row["tyoaika"];
     array_push( $output, array( $day => $poissa_sairas_loma ) );
   }
 

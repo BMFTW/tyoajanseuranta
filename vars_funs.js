@@ -30,6 +30,7 @@ var year_today           = new Date().getFullYear();
 var holidays_2021        = ["1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "1.5.2021", "13.5.2021", "25.6.2021", "26.6.2021", "6.12.2021", "24.12.2021", "25.12.2021", "26.12.2021"];
 var holidays_2022        = ["6.1.2022", "15.4.2022", "18.4.2022", "26.5.2022", "6.12.2022", "26.12.2022"];
 var holidays             = holidays_2021.concat(holidays_2022);
+    holidays             = holidays.map( date => asDate(date) ).map( date => date.getTime() );
 
 var uniqueID             = new Date().getTime();
 
@@ -1010,10 +1011,9 @@ function isWeekend(day) {
 
 function isHoliday(day) {
 
-  days = holidays.map( date => asDate(date) ).map( date => date.getTime() );
   day = day.getTime();
 
-  return days.includes(day);
+  return holidays.includes(day);
 
 }
 

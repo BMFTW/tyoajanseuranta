@@ -171,42 +171,34 @@ $.getScript("vars_funs.js", function() {
           txt = "Sairauspoissaolo";
         else if ( loma == 1 )
           txt = "Loma";
-        
+
         $("#times, #charts, #counts").hide();
 
         $("#times").after("<h1 id = 'txt' style = 'text-align: center'>" + txt + "</h1>");
 
         $("#txt").css("margin-top", "50px").css("margin-bottom", "50px");
 
+        if ( sairas == 1 ) {
+
+          delete times.poissa;
+          delete times.sairas;
+          delete times.loma;
+          delete times.liukumavahennys;
+          delete times.lounastauko;
+
+          var sum = Object.values(times).map( time => parseInt(time) ).reduce( (a, b) => a + b );
+              sum = s_to_hms(sum);
+
+          if ( sum != "00:00:00" ) {
+            $("#txt").css("margin-top", "50px").css("margin-bottom", "25px");
+            $("#txt").after("<h1 id = 'sick_time' style = 'text-align: center; color: blue'>" + sum + "</h1>");
+            $("#sick_time").css("margin-bottom", "50px");
+          }
+
+        }
+
         return false;
         
-      }
-
-      if ( edit == 1 ) {
-
-        if ( poissa == 1 )
-          $("#away").click();
-        else if ( sairas == 1 )
-          $("#sick").click();
-        else if ( loma == 1 )
-          $("#holiday").click();
-
-      }
-
-      if ( salary_period == 1 ) {
-
-        $("#aways").find("h3").text("Poissaolot");
-        $("#aways").find("h1").text(poissa);
-        $("#aways").find("h1").css("color", "red");
-
-        $("#sicks").find("h3").text("Sairauspoissaolot");
-        $("#sicks").find("h1").text(sairas);
-        $("#sicks").find("h1").css("color", "blue");
-
-        $("#holidays").find("h3").text("Lomapäivät");
-        $("#holidays").find("h1").text(loma);
-        $("#holidays").find("h1").css("color", yellow);
-
       }
 
       // -------------------------------------------------------------------------------------
@@ -247,6 +239,35 @@ $.getScript("vars_funs.js", function() {
       $sum.text(sum);
 
       sum != "00:00:00" ? $sum.css("color", "green") : $sum.css("color", "red");
+
+      // -------------------------------------------------------------------------------------
+
+      if ( edit == 1 ) {
+
+        if ( poissa == 1 )
+          $("#away").click();
+        else if ( sairas == 1 )
+          $("#sick").click();
+        else if ( loma == 1 )
+          $("#holiday").click();
+
+      }
+
+      if ( salary_period == 1 ) {
+
+        $("#aways").find("h3").text("Poissaolot");
+        $("#aways").find("h1").text(poissa);
+        $("#aways").find("h1").css("color", "red");
+
+        $("#sicks").find("h3").text("Sairauspoissaolot");
+        $("#sicks").find("h1").text(sairas);
+        $("#sicks").find("h1").css("color", "blue");
+
+        $("#holidays").find("h3").text("Lomapäivät");
+        $("#holidays").find("h1").text(loma);
+        $("#holidays").find("h1").css("color", yellow);
+
+      }
 
       // -------------------------------------------------------------------------------------
 
@@ -604,33 +625,34 @@ $.getScript("vars_funs.js", function() {
             var values = [];
             for ( var i = 0; i < labels.length; i++ )
               values.push(times[labels[i]]);
-  
+
             // Colors
-            var colors = []
+            var colors = [];
+            var color;
+            var value;
   
             for ( var i = 0; i < values.length; i++ ) {
   
-              var value = values[i];
-              var color;
+              value = values[i];
   
-              if      ( value <= 1 * 3600 ) color = "#00e600";
-              else if ( value <= 2 * 3600 ) color = "#00cc00"; 
-              else if ( value <= 3 * 3600 ) color = "#00b300";
-              else if ( value <= 4 * 3600 ) color = "#009900";
-              else if ( value <= 5 * 3600 ) color = "#008000";
-              else if ( value <= 6 * 3600 ) color = "#006600";
-              else if ( value <= 7 * 3600 ) color = "#004d00";
-              else if ( value <= 8 * 3600 ) color = "#003300";
-              else if ( value <= 9 * 3600 ) color = "#001a00";
-              else if ( value == "poissa" ) color = "red";
-              else if ( value == "sairas" ) color = "blue";
-              else if ( value == "loma"   ) color = yellow;
-              else                          color = "#000000";
+              if      ( value <= 1 * 3600 )        color = "#00e600";
+              else if ( value <= 2 * 3600 )        color = "#00cc00"; 
+              else if ( value <= 3 * 3600 )        color = "#00b300";
+              else if ( value <= 4 * 3600 )        color = "#009900";
+              else if ( value <= 5 * 3600 )        color = "#008000";
+              else if ( value <= 6 * 3600 )        color = "#006600";
+              else if ( value <= 7 * 3600 )        color = "#004d00";
+              else if ( value <= 8 * 3600 )        color = "#003300";
+              else if ( value <= 9 * 3600 )        color = "#001a00";
+              else if ( value == "poissa" )        color = "red";
+              else if ( value.includes("sairas") ) color = "blue";
+              else if ( value == "loma")           color = yellow;
+              else                                 color = "#000000";
   
               colors.push(color);
   
             }
-  
+
             // Tooltip labels
             var values_copy = values;
   
@@ -638,18 +660,20 @@ $.getScript("vars_funs.js", function() {
   
               var label;
               
-              if      ( values_copy[tooltipItem.index] == "poissa" ) label = "Poissa";
-              else if ( values_copy[tooltipItem.index] == "sairas" ) label = "Sairas";
-              else if ( values_copy[tooltipItem.index] == "loma" )   label = "Loma";
-              else                                                   label = s_to_hms(tooltipItem.yLabel);
+              if      ( values_copy[tooltipItem.index] == "poissa" )        label = "Poissa";
+              else if ( values_copy[tooltipItem.index].includes("sairas") ) { label = "Sairas" + " - " + s_to_hms(values_copy[tooltipItem.index].split(";")[1]); label = label.replace("- 00:00:00", ""); } 
+              else if ( values_copy[tooltipItem.index] == "loma" )          label = "Loma";
+              else                                                          label = s_to_hms(tooltipItem.yLabel);
               
               return label;
   
             }
+
+            values = values.map( value => value.replace("sairas;0", "sairas;27000").replace("sairas;", "") );
   
             // Height of away, sick, holiday bars
-            var hours = ( user != "Heli Haavisto" ) ? 7.5 : 7;
-  
+            var hours = 7.5;
+
             values = values.map( value => value = ( value == "poissa" || value == "sairas" || value == "loma") ? hours * 3600 : value );
 
             // Click bars
@@ -869,7 +893,7 @@ $.getScript("vars_funs.js", function() {
 
       if ( edit == "1" ) {
 
-        if ( $("#away").hasClass("on") || $("#sick").hasClass("on") || $("#holiday").hasClass("on") )
+        if ( $("#away").hasClass("on") || $("#holiday").hasClass("on") )
           return;
 
         var task = $(this).prev(".task").text();
@@ -929,7 +953,17 @@ $.getScript("vars_funs.js", function() {
 
         $time.text(s_to_hms(time)).show();
 
-        $time.text() != "00:00:00" ? $time.css("color", "green") : $time.css("color", "red");
+        if ( $time.text() != "00:00:00" ) {
+
+          if ( !$("#sick").hasClass("on") )
+              $time.css("color", "green");
+          else
+              $time.css("color", "blue");
+
+        }
+        
+        else
+            $time.css("color", "red");
 
         $(this).closest(".editTimes").remove();
 
@@ -950,7 +984,18 @@ $.getScript("vars_funs.js", function() {
 
         $sum.text(s_to_hms(sum)).show();
 
-        $sum.text() != "00:00:00" ? $sum.css("color", "green") : $sum.css("color", "red");
+        if ( $sum.text() != "00:00:00" ) {
+
+          if ( !$("#sick").hasClass("on") )
+              $sum.css("color", "green");
+          else
+              $sum.css("color", "blue");
+
+        }
+
+        else 
+            $sum.css("color", "red");
+
 
       }
       
@@ -964,16 +1009,34 @@ $.getScript("vars_funs.js", function() {
       if ( !$button.hasClass("on") ) {
 
         $("button").not("#" + $button.prop("id") + ", #cancel_edits, #save_edits").prop("disabled", true);
-        $("div[id^=tyokohde], #sum, #liukumavahennys, #lounastauko").css("opacity", 0.5);
         $button.html( $button.text() + "&nbsp;&#9989;" );
         $button.addClass("on");
 
+        if ( $button.prop("id") != "sick" ) {
+
+          $("input").prop("disabled", true);
+          $("#sum, div[id^=tyokohde], #liukumavahennys, #lounastauko").css("opacity", 0.5);
+
+        } else {
+        
+          $(".ok").prop("disabled", false);
+
+          $(".time").each( function() {
+            $(this).text() != "00:00:00" ? $(this).css("color", "blue") : $(this).css("color", "red");
+          });
+  
+        }
+
       } else {
 
-        $("button").prop("disabled", false);
-        $("div[id^=tyokohde], #sum, #liukumavahennys, #lounastauko").css("opacity", 1);
+        $("input, button").prop("disabled", false);
+        $("#sum, div[id^=tyokohde], #liukumavahennys, #lounastauko").css("opacity", 1);
         $button.html( $button.html().split("&")[0] );
         $button.removeClass("on");
+
+        $(".time").each( function() {
+          $(this).text() != "00:00:00" ? $(this).css("color", "green") : $(this).css("color", "red");
+        });
 
       }
 
