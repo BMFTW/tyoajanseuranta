@@ -244,7 +244,7 @@ function getStats($name, $day, $month, $year, $salary_period) {
     $sql .= " AND ";
     $sql .= "CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.$month2.$year2', 104)";
     $sql .= " AND ";
-    $sql .= "poissa != 1 AND sairas != 1 AND loma != 1";
+    $sql .= "poissa != 1 AND loma != 1";
 
   }
 
@@ -256,7 +256,7 @@ function getStats($name, $day, $month, $year, $salary_period) {
   }
 
   // Poissa, sairas & loma
-  $sql = str_replace(" AND poissa != 1 AND sairas != 1 AND loma != 1", "", $sql);
+  $sql = str_replace(" AND poissa != 1 AND loma != 1", "", $sql);
 
   $sql = "SELECT SUM(poissa) AS poissa, SUM(sairas) AS sairas, SUM(loma) AS loma " . strstr($sql, "FROM");
 
@@ -281,7 +281,7 @@ function liukuma($name, $date_start, $date_end) {
   $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
 
   $sql  = "SELECT SUM(" . implode(" + ", $tyokohteet_tyoaikaaNostattavat) . ") AS sum FROM $table ";
-  $sql .= "WHERE nimi = ? AND poissa != 1 AND sairas != 1 AND loma != 1 AND ";
+  $sql .= "WHERE nimi = ? AND poissa != 1 AND loma != 1 AND ";
   $sql .= "CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104)";
 
   $sum = $conn -> prepare($sql);
@@ -350,7 +350,7 @@ function liukumat($date_start, $date_end) {
     FROM 
         ( SELECT DISTINCT nimi FROM $table ) AS TBL1
     LEFT JOIN	
-        ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND poissa != 1 AND sairas != 1 AND loma != 1 ) AS TBL2
+        ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND poissa != 1 AND loma != 1 ) AS TBL2
     ON 
         TBL1.nimi = TBL2.nimi
     GROUP BY 
@@ -534,7 +534,7 @@ function chart2($name, $day, $month, $year) {
        nimi = ? AND 
        CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.$month1.$year1', 104) AND 
        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.$month2.$year2', 104) AND 
-       poissa != 1 AND sairas != 1 AND loma != 1
+       poissa != 1 AND loma != 1
     ORDER BY 
        CONVERT(DATETIME, pvm, 104)
 
@@ -639,7 +639,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     FROM 
         ( SELECT DISTINCT nimi FROM $table ) AS TBL1
     LEFT JOIN	
-        ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND poissa != 1 AND sairas != 1 AND loma != 1 ) AS TBL2
+        ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND poissa != 1 AND loma != 1 ) AS TBL2
     ON 
         TBL1.nimi = TBL2.nimi
     GROUP BY 
