@@ -661,15 +661,15 @@ $.getScript("vars_funs.js", function() {
               var label;
               
               if      ( values_copy[tooltipItem.index] == "poissa" )        label = "Poissa";
-              else if ( values_copy[tooltipItem.index].includes("sairas") ) { label = "Sairas" + " - " + s_to_hms(values_copy[tooltipItem.index].split(";")[1]); label = label.replace("- 00:00:00", ""); } 
+              else if ( values_copy[tooltipItem.index].includes("sairas") ) { label = "Sairas" + " - " + s_to_hms(values_copy[tooltipItem.index].split(";")[1]); label = label.replace("- 00:00:00", ""); label = label.includes(":") ? label + " töitä" : label } 
               else if ( values_copy[tooltipItem.index] == "loma" )          label = "Loma";
               else                                                          label = s_to_hms(tooltipItem.yLabel);
               
               return label;
   
             }
-
-            values = values.map( value => value.replace("sairas;0", "sairas;27000").replace("sairas;", "") );
+            
+            values = values.map( value => value.includes("sairas") ? "sairas" : value );
   
             // Height of away, sick, holiday bars
             var hours = 7.5;
