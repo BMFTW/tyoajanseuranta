@@ -630,6 +630,8 @@ $.getScript("vars_funs.js", function() {
             var colors = [];
             var color;
             var value;
+
+            values = values.map( value => typeof value == "undefined" ? "0" : value );
   
             for ( var i = 0; i < values.length; i++ ) {
   
