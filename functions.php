@@ -54,7 +54,7 @@ $tyokohteet = [
 
 $tyokohteet_tyoaikaaNostattavat = array_filter($tyokohteet, function($value) { return $value != "lounastauko" && $value != "liukumavahennys"; } );
 
-$tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Emma Ruotsalainen", "Jaakko Saano");
+$tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano");
 
 function getTimers($name, $date) {
 

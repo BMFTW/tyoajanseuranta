@@ -3,7 +3,7 @@ var kaikki_kohteet_index = ["Yhteensä", "Töissä", "Tietojärjestelmät - Kehi
 var kaikki_kohteet_stats = ["Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
 
 var tyontekijat          = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto", "Elina Hanslian", "Mirelle Kangas", "Otto Kontio", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Heli Rokkonen", "Emma Ruotsalainen", "Jaakko Saano", "Jarkko Wallenius"];
-var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Emma Ruotsalainen", "Jaakko Saano"];
+var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano"];
 var kuukausipalkalliset  = tyontekijat.filter( tyontekija => !tuntipalkalliset.includes(tyontekija) );
 
 var userID               = getUrlParameter("userID");
