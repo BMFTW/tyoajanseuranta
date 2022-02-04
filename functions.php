@@ -762,9 +762,9 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   $sheet1 = array();
 
   // Column names
-  array_push($sheet1, ["Nimi", "Tunnit / pv", "Pv", "Tunnit / kk", "Työaika", "Poissa", "Sairas", "Loma", "Yhteensä", "+/-", "Liukumasaldo"]);
+  array_push($sheet1, ["Nimi", "Työaika", "Poissa", "Sairas", "Loma", "Yhteensä", "+/-", "Liukumasaldo"]);
 
-  // Nimi, tunnit_pv, pv, tunnit_kk, tyoaika
+  // Nimi, työaika
   $sql_data = $conn -> prepare($sql_tyoajat);
   $sql_data -> execute([$date_start, $date_end]);
   $sql_data = $sql_data -> fetchAll();
@@ -775,23 +775,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $tyoaika = $person["tyoaika"];
     $tyoaika = s_to_hms($tyoaika);
 
-    $tuntipalkallinen = in_array($nimi, $tuntipalkalliset);
-    $kuukausipalkallinen = !$tuntipalkallinen;
-
-    if ( $tuntipalkallinen )
-      $tunnit_pv = "\0-";
-    else
-      $tunnit_pv = "07:30:00";
-
-    $pv = $num_work_days;
-    $pv = $kuukausipalkallinen ? $num_work_days : "\0-";
-
-    $tunnit_kk = $kuukausipalkallinen ? s_to_hms( hms_to_s($tunnit_pv) * (int) $pv ) : "\0-";
-
-    $tunnit_pv = "\0" . $tunnit_pv;
-    $pv        = "\0" . $pv;
-
-    array_push($sheet1, [$nimi, $tunnit_pv, $pv, $tunnit_kk, $tyoaika]);
+    array_push($sheet1, [$nimi, $tyoaika]);
 
   }
 
@@ -820,7 +804,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   foreach ( $sql_data as $person ) {
 
     $nimi     = $sheet1[$i][0];
-    $tyoaika  = hms_to_s($sheet1[$i][4]);
+    $tyoaika  = hms_to_s($sheet1[$i][1]);
 
     $tuntipalkallinen = in_array($nimi, $tuntipalkalliset);
 
@@ -832,7 +816,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $sairas_la_su = $person["sairas_la_su"];
     $loma_la_su   = $person["loma_la_su"];
 
-    if ( $tuntipalkallinen  )
+    if ( $tuntipalkallinen )
       $tunnit_pv = hms_to_s("00:00:00");
     else
       $tunnit_pv = hms_to_s("07:30:00");
@@ -847,22 +831,24 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   }
 
   // +/-
-  // Yhteensä - Tunnit / kk
+  // = Yhteensä - Tunnit / kk
   for ( $i = 1; $i < count($sheet1); $i++ ) {
 
-    // Tunnit / kk
-    $tunnit_kk = $sheet1[$i][3];
+    $nimi = $sheet1[$i][0];
 
-    if ( $tunnit_kk == "\0-" ) {
+    $tuntipalkallinen = in_array($nimi, $tuntipalkalliset);
+
+    if ( $tuntipalkallinen ) {
       $sheet1[$i] = array_merge($sheet1[$i], ["-"]);
       continue;
     }
 
-    $tunnit_kk = hms_to_s($tunnit_kk);
-
     // Yhteensä
-    $yhteensa = $sheet1[$i][8];
+    $yhteensa = $sheet1[$i][5];
     $yhteensa = hms_to_s($yhteensa);
+
+    // Tunnit / kk
+    $tunnit_kk = 7.5 * 3600 * (int) $num_work_days;
 
     // Result
     $result = $yhteensa - $tunnit_kk;
@@ -886,11 +872,10 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   // Siistiminen
   for ( $i = 1; $i < count($sheet1); $i++ ) {
 
-    $sheet1[$i][3]  = "\0" . $sheet1[$i][3];
-    $sheet1[$i][4]  = "\0" . $sheet1[$i][4];
-    $sheet1[$i][8]  = "\0" . $sheet1[$i][8];
-    $sheet1[$i][9]  = "\0" . $sheet1[$i][9];
-    $sheet1[$i][10] = "\0" . $sheet1[$i][10];
+    $sheet1[$i][1] = "\0" . $sheet1[$i][1];
+    $sheet1[$i][5] = "\0" . $sheet1[$i][5];
+    $sheet1[$i][6] = "\0" . $sheet1[$i][6];
+    $sheet1[$i][7] = "\0" . $sheet1[$i][7];
 
   }
 
