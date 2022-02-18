@@ -507,6 +507,9 @@ $.getScript("vars_funs.js", function () {
 
       }
 
+      if ( user == "Riikka Panu" || user == "Heli Rokkonen" || user == "Jarkko Wallenius" )
+          $("#fiilismittari_report").show();
+
       // Cancel
       $("#cancel").click( function () {
 

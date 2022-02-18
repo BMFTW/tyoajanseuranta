@@ -39,6 +39,12 @@
 				float: right;
   			}
 
+			#fiilismittari_report {
+				margin-top: -10px;
+				margin-bottom: 25px;
+				display: none;
+			}
+
 			#cancel_stats_save {
 				white-space: nowrap;
 			}
@@ -187,9 +193,18 @@
 			<hr style = "width:40%">
 
 			<!-- Fiilismittari -->
-			<p align = "center">
-				<iframe src = "https://www.awanic.fi/haipro/200/qpro/julkinen/kysely.asp?kohdeID=200&julkaisuID=1&avain=a3p6h8b9v7" title = "Fiilismittari"></iframe>
-			</p>
+			<div class = "row" id = "fiilismittari">
+				<div class = "col-sm-12 text-center">
+					<iframe src = "https://www.awanic.fi/haipro/200/qpro/julkinen/kysely.asp?kohdeID=200&julkaisuID=1&avain=a3p6h8b9v7" title = "Fiilismittari"></iframe>
+				</div>
+			</div>
+
+			<!-- Raportti -->
+			<div class = "row" id = "fiilismittari_report">
+				<div class = "col-sm-12 text-center">
+					<a href = "https://www.awanic.fi/haipro/200/qpro/raportti.asp?kohdeID=200&julkaisuID=1" target = "_blank">Raportti</a>
+				</div>
+			</div>
 
 			<!-- --- -->
 			<hr style = "width:40%">
