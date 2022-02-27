@@ -773,7 +773,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   $sheet1 = array();
 
   // Column names
-  array_push($sheet1, ["Nimi", "Työaika", "Poissa", "Sairas", "Loma", "Yhteensä", "+/-", "Liukumasaldo"]);
+  array_push($sheet1, ["Nimi", "Työaika", "Poissa", "Sairas", "Loma", "Yhteensä", "Pyöristys", "+/-", "Liukumasaldo"]);
 
   // Nimi, työaika
   $sql_data = $conn -> prepare($sql_tyoajat);
@@ -841,6 +841,20 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   }
 
+  // Pyöristys
+  for ( $i = 1; $i < count($sheet1); $i++ ) {
+
+    $yhteensa = $sheet1[$i][5];
+
+    $pyoristys = $yhteensa;
+    $pyoristys = hms_to_s($pyoristys);
+    $pyoristys = ceil( $pyoristys / 900 ) * 900;
+    $pyoristys = s_to_hms($pyoristys);
+
+    $sheet1[$i] = array_merge($sheet1[$i], [$pyoristys]);
+
+  }
+
   // +/-
   // = Yhteensä - Tunnit / kk
   for ( $i = 1; $i < count($sheet1); $i++ ) {
@@ -887,6 +901,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     $sheet1[$i][5] = "\0" . $sheet1[$i][5];
     $sheet1[$i][6] = "\0" . $sheet1[$i][6];
     $sheet1[$i][7] = "\0" . $sheet1[$i][7];
+    $sheet1[$i][8] = "\0" . $sheet1[$i][8];
 
   }
 
