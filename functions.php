@@ -631,6 +631,17 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   $date_start = "26." . $month1 . "." . $year1;
   $date_end   = "25." . $month2 . "." . $year2;
 
+  // February 2022 exceptions
+  if ( $date_end == "25.2.2022" ) {
+    $date_start = "26.1.2022";
+    $date_end = "23.2.2022";
+  }
+
+  if ( $date_end == "25.3.2022" ) {
+    $date_start = "24.2.2022";
+    $date_end = "25.3.2022";
+  }
+
   // Työajat
   $sql_tyoajat = "
 

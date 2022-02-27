@@ -1236,6 +1236,16 @@ $.getScript("vars_funs.js", function() {
         else
           date_end = 25 + "." + next_month + "." + next_year;
       }
+
+      if ( date_end == "25.2.2022" ) {
+        date_start = "26.1.2022";
+        date_end = "23.2.2022";
+      }
+    
+      if ( date_end == "25.3.2022" ) {
+        date_start = "24.2.2022";
+        date_end = "25.3.2022";
+      }
     
       $("#liukumat_data").load("liukumat.php?date_start=" + date_start + "&date_end=" + date_end, function() {
 
