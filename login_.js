@@ -10,6 +10,7 @@ $(document).ready( function() {
          ( $("#email").val() == "mirelle.kangas@awanic.fi"    && $("#pwd").val() == "4866" ) ||
          ( $("#email").val() == "otto.kontio@awanic.fi"       && $("#pwd").val() == "6632" ) ||
          ( $("#email").val() == "simo.korpela@awanic.fi"      && $("#pwd").val() == "2544" ) ||
+         ( $("#email").val() == "eeli.kuosmanen@awanic.fi"    && $("#pwd").val() == "7029" ) ||
          ( $("#email").val() == "tuukka.monto@awanic.fi"      && $("#pwd").val() == "6448" ) ||
          ( $("#email").val() == "elisa.makinen@awanic.fi"     && $("#pwd").val() == "9043" ) ||
          ( $("#email").val() == "riikka.panu@awanic.fi"       && $("#pwd").val() == "0311" ) ||

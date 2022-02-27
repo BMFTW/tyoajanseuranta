@@ -85,6 +85,7 @@ $.getScript("vars_funs.js", function() {
       $("#person").append( new Option( "Valtteri Anttila", "3358000" ) );
       $("#person").append( new Option( "Heli Haavisto",    "1719150" ) );
       $("#person").append( new Option( "Elina Hanslian",   "2294025" ) );
+      $("#person").append( new Option( "Eeli Kuosmanen",   "2565585" ) );
       $("#person").append( new Option( "Tuukka Monto",     "2353520" ) );
       $("#person").append( new Option( "Jaakko Saano",     "2913065" ) );
       
@@ -102,6 +103,7 @@ $.getScript("vars_funs.js", function() {
       $("#person").append( new Option( "Mirelle Kangas",    "1776090" ) );
       $("#person").append( new Option( "Otto Kontio",       "2420680" ) );
       $("#person").append( new Option( "Simo Korpela",      "928560"  ) );
+      $("#person").append( new Option( "Eeli Kuosmanen",    "2565585" ) );
       $("#person").append( new Option( "Tuukka Monto",      "2353520" ) );
       $("#person").append( new Option( "Elisa Mäkinen",     "3300695" ) );
       $("#person").append( new Option( "Riikka Panu",       "113515"  ) );
