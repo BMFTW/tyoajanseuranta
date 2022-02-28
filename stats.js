@@ -314,8 +314,6 @@ $.getScript("vars_funs.js", function() {
             balance = 0;
 
           var hours = 7.5;
-          if ( user == "Heli Haavisto" )
-            hours = 7;
         
           var liukuma = sum + balance - num_days * hours * 3600;
           var sign    = liukuma >= 0 ? "+" : "-";
@@ -361,8 +359,6 @@ $.getScript("vars_funs.js", function() {
             balance = 0;
 
           var hours = 7.5;
-          if ( user == "Heli Haavisto" )
-            hours = 7;
         
           var liukuma = sum + balance - num_days * hours * 3600;
           var sign    = liukuma >= 0 ? "+" : "-";
@@ -1194,60 +1190,46 @@ $.getScript("vars_funs.js", function() {
     // Download report
     $("#report").find("button").click( function () {
 
+      var date_start;
+      var date_end;
+
       var previous_month = ( month - 1 != 0 ) ? month - 1 : 12;
       var previous_year  = ( month - 1 != 0 ) ? year : year - 1;
 
       var next_month = ( month + 1 != 13 ) ? month + 1 : 1;
       var next_year  = ( month + 1 != 13 ) ? year : year + 1;
 
-      if ( day <= 25 ) {  
+      if ( day <= 25 ) {
 
-        var month1 = previous_month;
-        var year1  = previous_year;
-        var month2 = month;
-        var year2  = year;
+        date_start = 26 + "." + previous_month + "." + previous_year;
+        date_end   = 25 + "." + month + "." + year;
+
+        // February 2022 exceptions
+        if ( day <= 23 && month == 2 && year == 2022 )
+          date_end = "23.2.2022";
+        
+        if ( day > 23 && month == 2 && year == 2022 ) {
+          date_start = "24.2.2022";
+          date_end   = "25.3.2022";
+        }
 
       } else {
 
-        var month1 = month;
-        var year1  = year;
-        var month2 = next_month;
-        var year2  = next_year;
+        date_start = 26 + "." + month + "." + year;
+        date_end   = 25 + "." + next_month + "." + next_year;
+
+        // February 2022 exceptions
+        if ( next_month == 2 && next_year == 2022 )
+          date_end = "23.2.2022";
+        if ( next_month == 3 && next_year == 2022 )
+          date_start = "24.2.2022";
 
       }
 
-      var start = 26 + "." + month1 + "." + year1;
-      var end   = 25 + "." + month2 + "." + year2;
-
-      var is_current_salary_period = getDates(start, end).map( date => date.getTime() ).includes( asDate(day_today + "." + month_today + "." + year_today).getTime() );
-
-      if ( is_current_salary_period )
-        end = day + "." + month + "." + year;
-
-      var num_work_days = getDates(start, end).filter( day => !isWeekend(day) ).length;
+      var num_work_days = getDates(date_start, date_end).filter( day => !isWeekend(day) ).length;
 
       // Liukumasaldot
-      var date_start = "26.4.2021";
-      var date_end;
-
-      if ( month == month_today || ( month == previous_month && day >= 26 ) )
-        date_end = day + "." + month + "." + year;
-      else if ( month != month_today ) {
-        if ( day <= 25 )
-          date_end = 25 + "." + month + "." + year;
-        else
-          date_end = 25 + "." + next_month + "." + next_year;
-      }
-
-      if ( date_end == "25.2.2022" ) {
-        date_start = "26.1.2022";
-        date_end = "23.2.2022";
-      }
-    
-      if ( date_end == "25.3.2022" ) {
-        date_start = "24.2.2022";
-        date_end = "25.3.2022";
-      }
+      date_start = "26.4.2021";
     
       $("#liukumat_data").load("liukumat.php?date_start=" + date_start + "&date_end=" + date_end, function() {
 
@@ -1296,8 +1278,6 @@ $.getScript("vars_funs.js", function() {
             balance = 0;
   
           var hours = 7.5;
-          if ( nimi == "Heli Haavisto" )
-            hours = 7;
         
           var liukuma = sum + balance - num_days * hours * 3600;
           var sign    = liukuma >= 0 ? "plus" : "-";
@@ -1310,7 +1290,13 @@ $.getScript("vars_funs.js", function() {
 
         $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&holidays=" + holidays.join(",") + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
 
-          if ( day <= 25 )
+          // February 2022 exceptions
+          if ( day <= 23 && month == 2 && year == 2022 )
+            window.location.href = "download.php?file=tyotunnit_" + month + "_" + year + ".xlsx";
+          else if ( day > 23 && month == 2 && year == 2022 )
+            window.location.href = "download.php?file=tyotunnit_" + next_month + "_" + next_year + ".xlsx";
+
+          else if ( day <= 25 )
             window.location.href = "download.php?file=tyotunnit_" + month + "_" + year + ".xlsx";
           else
             window.location.href = "download.php?file=tyotunnit_" + next_month + "_" + next_year + ".xlsx";
