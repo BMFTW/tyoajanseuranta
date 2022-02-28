@@ -733,7 +733,8 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     SELECT 
         nimi,
         DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) AS pv,
-        pvm
+        pvm, " .
+        implode(" + ", $tyokohteet_tyoaikaaNostattavat) . " AS tyoaika
     FROM 
         $table
     WHERE 
@@ -956,9 +957,10 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
   foreach ( $sql_data as $person ) {
 
-    $nimi  = $person["nimi"];
-    $pv    = $person["pv"];
-    $pvm   = $person["pvm"];
+    $nimi    = $person["nimi"];
+    $pv      = $person["pv"];
+    $pvm     = $person["pvm"];
+    $tyoaika = $person["tyoaika"];
 
     if ( $pv == "Monday" )    $pv = "Ma";
     if ( $pv == "Tuesday" )   $pv = "Ti";
@@ -968,10 +970,14 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
     if ( $pv == "Saturday" )  $pv = "La";
     if ( $pv == "Sunday" )    $pv = "Su";
 
+    $tyoaika = s_to_hms($tyoaika);
+    $tyoaika = $tyoaika == "00:00:00" ? "-" : $tyoaika;
+    $tyoaika = "\0" . $tyoaika;
+
     if ( count($data) > 0 && $nimi != end($data)[0] )
       array_push($data, array());
 
-    array_push($data, array($nimi, $pv, $pvm));
+    array_push($data, array($nimi, $pv, $pvm, $tyoaika));
 
   }
 
