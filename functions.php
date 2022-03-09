@@ -54,7 +54,7 @@ $tyokohteet = [
 
 $tyokohteet_tyoaikaaNostattavat = array_filter($tyokohteet, function($value) { return $value != "lounastauko" && $value != "liukumavahennys"; } );
 
-$tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano");
+$tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano");
 
 function getTimers($name, $date) {
 
@@ -238,11 +238,21 @@ function getStats($name, $day, $month, $year, $salary_period) {
 
     }
 
+    $day1 = 26;
+    $day2 = 25;
+
+    // February & March 2022 exceptions
+    if ( ( $day >= 26 && $month == 1 && $year == 2022 ) || ( $day <= 23 && $month == 2 && $year == 2022 ) )
+      $day2 = 23;
+
+    if ( ( $day >= 24 && $month == 2 && $year == 2022 ) || ( $day <= 25 && $month == 3 && $year == 2022 ) )
+      $day1 = 24;
+
     $sql .= "WHERE nimi = '$name'";
     $sql .= " AND ";
-    $sql .= "CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.$month1.$year1', 104)";
+    $sql .= "CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '$day1.$month1.$year1', 104)";
     $sql .= " AND ";
-    $sql .= "CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.$month2.$year2', 104)";
+    $sql .= "CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '$day2.$month2.$year2', 104)";
     $sql .= " AND ";
     $sql .= "poissa != 1 AND loma != 1";
 
@@ -501,6 +511,16 @@ function chart2($name, $day, $month, $year) {
 
   $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
 
+  $day1 = 26;
+  $day2 = 25;
+
+  // February & March 2022 exceptions
+  if ( ( $day >= 26 && $month == 1 && $year == 2022 ) || ( $day <= 23 && $month == 2 && $year == 2022 ) )
+    $day2 = 23;
+
+  if ( ( $day >= 24 && $month == 2 && $year == 2022 ) || ( $day <= 25 && $month == 3 && $year == 2022 ) )
+    $day1 = 24;
+
   if ( $day <= 25 ) {
 
     $previous_month = ( $month - 1 != 0 ) ? $month - 1 : 12;
@@ -532,8 +552,8 @@ function chart2($name, $day, $month, $year) {
        $table
     WHERE 
        nimi = ? AND 
-       CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.$month1.$year1', 104) AND 
-       CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.$month2.$year2', 104) AND 
+       CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '$day1.$month1.$year1', 104) AND 
+       CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '$day2.$month2.$year2', 104) AND 
        poissa != 1 AND loma != 1
     ORDER BY 
        CONVERT(DATETIME, pvm, 104)
@@ -554,8 +574,8 @@ function chart2($name, $day, $month, $year) {
         $table
     WHERE 
         nimi = ? AND 
-        CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '26.$month1.$year1', 104) AND 
-        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '25.$month2.$year2', 104) AND 
+        CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '$day1.$month1.$year1', 104) AND 
+        CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, '$day2.$month2.$year2', 104) AND 
         ( poissa = 1 OR sairas = 1 OR loma = 1 )
     ORDER BY 
         CONVERT(DATETIME, pvm, 104)
@@ -583,6 +603,17 @@ function chart2($name, $day, $month, $year) {
     $poissa_sairas_loma = $row["poissa_sairas_loma"];
     if ( $poissa_sairas_loma == "sairas" ) $poissa_sairas_loma .= ";" . $row["tyoaika"];
     array_push( $output, array( $day => $poissa_sairas_loma ) );
+  }
+
+  // February & March 2022 exceptions
+  if ( isset($output[0][24]) || isset($output[1][25]) ) {
+    
+    $output[0]["24.2."] = $output[0][24];
+    unset($output[0][24]);
+
+    $output[1]["25.2."] = $output[1][25];
+    unset($output[1][25]);
+    
   }
 
   $output = empty($output) ? array( "0" => 0 ) : $output;
@@ -631,7 +662,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   $date_start = "26." . $month1 . "." . $year1;
   $date_end   = "25." . $month2 . "." . $year2;
 
-  // February 2022 exceptions
+  // February & March 2022 exceptions
   if ( $date_end == "25.2.2022" ) {
     $date_start = "26.1.2022";
     $date_end = "23.2.2022";

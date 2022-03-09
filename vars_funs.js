@@ -2,8 +2,8 @@
 var kaikki_kohteet_index = ["Yhteensä", "Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
 var kaikki_kohteet_stats = ["Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
 
-var tyontekijat          = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto", "Elina Hanslian", "Mirelle Kangas", "Otto Kontio", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Heli Rokkonen", "Emma Ruotsalainen", "Jaakko Saano", "Jarkko Wallenius"];
-var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano"];
+var tyontekijat          = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto", "Elina Hanslian", "Mirelle Kangas", "Otto Kontio", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Heli Rokkonen", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano", "Jarkko Wallenius"];
+var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano"];
 var kuukausipalkalliset  = tyontekijat.filter( tyontekija => !tuntipalkalliset.includes(tyontekija) );
 
 var userID               = getUrlParameter("userID");
@@ -178,7 +178,7 @@ function time_to_hms(time) {
   if ( time == 0 ) 
     return "00:00:00";
 
-  time = new Date(time);
+  var time = new Date(time);
 
   var h = time.getHours();
   var m = time.getMinutes();
@@ -1011,13 +1011,43 @@ function hideURLParams() {
 	
 }
 
+function isDateObject(date) {
+  return typeof date.getMonth === 'function';
+}
+
+function isValidDate(date) {
+
+  var date = date;
+
+  if ( !isDateObject(date) )
+    date = date.split(".");
+  
+  var day   = date[0];
+  var month = date[1];
+  var year  = date[2];
+  
+  date = new Date(year, +month - 1, day);
+  
+  if ( day != date.getDate() )
+    return false;
+    
+  if ( month != date.getMonth() + 1 )
+    return false;
+    
+  if ( year != date.getFullYear() )
+    return false;
+    
+  return true;
+
+}
+
 function asDate(date) {
 
-  date = date.split(".");
+  var date = date.split(".");
   
-  thisDay   = date[0];
-  thisMonth = +date[1] - 1;
-  thisYear  = date[2];
+  var thisDay   = date[0];
+  var thisMonth = +date[1] - 1;
+  var thisYear  = date[2];
   
   date = new Date(thisYear, thisMonth, thisDay);
   
@@ -1027,8 +1057,8 @@ function asDate(date) {
 
 function getDates(start, end) {
 
-  start = asDate(start);
-  end   = asDate(end);
+  var start = asDate(start);
+  var end   = asDate(end);
 
   var arr = new Array();
   var dt  = new Date(start);
@@ -1053,7 +1083,7 @@ function isWeekend(day) {
 
 function isHoliday(day) {
 
-  day = day.getTime();
+  var day = day.getTime();
 
   return holidays.includes(day);
 

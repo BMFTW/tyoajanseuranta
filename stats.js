@@ -70,6 +70,7 @@ $.getScript("vars_funs.js", function() {
       $("#person").append( new Option( "Mirelle Kangas",    "1776090" ) );
       $("#person").append( new Option( "Otto Kontio",       "2420680" ) );
       $("#person").append( new Option( "Simo Korpela",      "928560"  ) );
+      $("#person").append( new Option( "Eeli Kuosmanen",    "2565585" ) );
       $("#person").append( new Option( "Elisa Mäkinen",     "3300695" ) );
       $("#person").append( new Option( "Oskari Riihimäki",  "815775"  ) );
       $("#person").append( new Option( "Emma Ruotsalainen", "913230"  ) );
@@ -85,7 +86,6 @@ $.getScript("vars_funs.js", function() {
       $("#person").append( new Option( "Valtteri Anttila", "3358000" ) );
       $("#person").append( new Option( "Heli Haavisto",    "1719150" ) );
       $("#person").append( new Option( "Elina Hanslian",   "2294025" ) );
-      $("#person").append( new Option( "Eeli Kuosmanen",   "2565585" ) );
       $("#person").append( new Option( "Tuukka Monto",     "2353520" ) );
       $("#person").append( new Option( "Jaakko Saano",     "2913065" ) );
       
@@ -581,29 +581,39 @@ $.getScript("vars_funs.js", function() {
             // Filter out days of the month that don't exist
             if ( day <= 25 ) {
   
-              month0 = ( month - 2 >= 0 ) ? month - 2 : 11;
-              year0  = ( month - 2 >= 0 ) ? year : year - 1;
+              previous_month = ( month - 1 >= 1 ) ? month - 1 : 12;
+              previous_year  = ( month - 1 >= 1 ) ? year : year - 1;
   
-              for ( var day_ = 28; day_ <= 31; day_++ ) {
-  
-                var date = new Date(year0, month0, day_);
-  
-                if ( date.getDate() != day_ || date.getMonth() != month0 || date.getFullYear() != year0 )
-                  days = days.filter( day__ => day__ != day_ );
+              for ( var day_i = 28; day_i <= 31; day_i++ ) {
+
+                date = day_i + "." + previous_month + "." + previous_year;
+
+                if ( !isValidDate(date) )
+                  days = days.filter( day_elem => day_elem != day_i );
   
               }
   
             } else {
   
-              for ( var day_ = 28; day_ <= 31; day_++ ) {
-  
-                var date = new Date(year, +month - 1, day_);
-  
-                if ( date.getDate() != day_ || date.getMonth() != ( +month - 1 ) || date.getFullYear() != year )
-                  days = days.filter( day__ => day__ != day_ );
+              for ( var day_i = 28; day_i <= 31; day_i++ ) {
+
+                date = day_i + "." + month + "." + year;
+
+                if ( !isValidDate(date) )
+                  days = days.filter( day_elem => day_elem != day_i );
   
               }
   
+            }
+
+            // February & March 2022 exceptions
+            if ( $("#date").text().includes(".1.2022 -") ) {
+              $("#date").text("26.1.2022 - 23.2.2022");
+              days = [26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+            }
+            if ( $("#date").text().includes(".2.2022 -") ) {
+              $("#date").text("24.2.2022 - 25.3.2022");
+              days = ["24.2.", "25.2.", 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
             }
   
             // Day value is 0 if it doesn't exist
@@ -617,12 +627,16 @@ $.getScript("vars_funs.js", function() {
                 times[day] = "0";
 
             }
-  
+
             // Labels & values
             var labels = days;
             var values = [];
             for ( var i = 0; i < labels.length; i++ )
               values.push(times[labels[i]]);
+
+            // February & March 2022 exceptions
+            if ( labels[0] == "24.2." ) labels[0] = 24;
+            if ( labels[1] == "25.2." ) labels[1] = 25;
 
             // Colors
             var colors = [];
@@ -843,13 +857,13 @@ $.getScript("vars_funs.js", function() {
       month  = $("#month").val();
       year   = $("#year").val();
 
-      // Check if valid date
+      // Check if date is valid
       if ( day != "" && month != "" && year != "" ) {
-         
-        var date = new Date(year, +month - 1, day);
 
-        if ( date.getDate() != day || date.getMonth() != ( +month - 1 ) || date.getFullYear() != year ) {
-          alert(day + "." + month + "." + year + " ei ole validi päivämäärä");
+        var date = day + "." + month + "." + year;
+
+        if ( !isValidDate(date) ) {
+          alert(date + " ei ole validi päivämäärä");
           return;
         }
       
@@ -1204,7 +1218,7 @@ $.getScript("vars_funs.js", function() {
         date_start = 26 + "." + previous_month + "." + previous_year;
         date_end   = 25 + "." + month + "." + year;
 
-        // February 2022 exceptions
+        // February & March 2022 exceptions
         if ( day <= 23 && month == 2 && year == 2022 )
           date_end = "23.2.2022";
         
@@ -1218,7 +1232,7 @@ $.getScript("vars_funs.js", function() {
         date_start = 26 + "." + month + "." + year;
         date_end   = 25 + "." + next_month + "." + next_year;
 
-        // February 2022 exceptions
+        // February & March 2022 exceptions
         if ( next_month == 2 && next_year == 2022 )
           date_end = "23.2.2022";
         if ( next_month == 3 && next_year == 2022 )
@@ -1290,7 +1304,7 @@ $.getScript("vars_funs.js", function() {
 
         $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&holidays=" + holidays.join(",") + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
 
-          // February 2022 exceptions
+          // February & March 2022 exceptions
           if ( day <= 23 && month == 2 && year == 2022 )
             window.location.href = "download.php?file=tyotunnit_" + month + "_" + year + ".xlsx";
           else if ( day > 23 && month == 2 && year == 2022 )
