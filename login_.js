@@ -18,6 +18,7 @@ $(document).ready( function() {
          ( $("#email").val() == "heli.rokkonen@awanic.fi"     && $("#pwd").val() == "9751" ) ||
          ( $("#email").val() == "emma.ruotsalainen@awanic.fi" && $("#pwd").val() == "2502" ) ||
          ( $("#email").val() == "jaakko.saano@awanic.fi"      && $("#pwd").val() == "7981" ) ||
+         ( $("#email").val() == "kaisa.saano@awanic.fi"       && $("#pwd").val() == "3656" ) ||
          ( $("#email").val() == "jarkko.wallenius@awanic.fi"  && $("#pwd").val() == "7713" ) ) {
 
       var userID = parseInt($("#pwd").val()) * 365;

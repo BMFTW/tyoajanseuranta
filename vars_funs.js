@@ -15,7 +15,7 @@ var year                 = getUrlParameter("year");
 var edit                 = getUrlParameter("edit");
 var salary_period        = getUrlParameter("salary_period");
 
-var userIDs              = ["594585", "3358000", "1719150", "2294025", "1776090", "2420680", "928560", "2565585", "2353520", "3300695", "113515", "815775", "3559115", "913230", "2913065", "2815245"];
+var userIDs              = ["594585", "3358000", "1719150", "2294025", "1776090", "2420680", "928560", "2565585", "2353520", "3300695", "113515", "815775", "3559115", "913230", "2913065", "1334440", "2815245"];
 
 var user                 = getName(userID);
 var user_                = getName(userID, "_");
@@ -53,6 +53,7 @@ var users = {
   "3559115" : "Heli Rokkonen",
   "913230"  : "Emma Ruotsalainen",
   "2913065" : "Jaakko Saano",
+  "1334440" : "Kaisa Saano",
   "2815245" : "Jarkko Wallenius"
 };
 
@@ -75,6 +76,7 @@ function getName( userID, underscore = "" ) {
     "3559115" : "Heli Rokkonen",
     "913230"  : "Emma Ruotsalainen",
     "2913065" : "Jaakko Saano",
+    "1334440" : "Kaisa Saano",
     "2815245" : "Jarkko Wallenius"
   };
 
@@ -584,6 +586,28 @@ function naytaKaikkienKohteet_index() {
     ]);
     
   }
+
+  else if ( user == "Kaisa Saano" ) {
+
+    naytaKohteet_index([
+      "Yhteensä",
+      "Tietojärjestelmät - Kehitys",
+      "Tietojärjestelmät - Tuki",
+      "LOVe - Ylläpito",
+      "LOVe - Tuki",
+      "LOVe - Sisällöntuotanto",
+      "Muut verkkokurssit - Ylläpito",
+      "Muut verkkokurssit - Tuki",
+      "Muut verkkokurssit - Sisällöntuotanto",
+      "Muut tuotteet - Kehitys",
+      "Muut tuotteet - Tuki",
+      "Sopimukset & tarjoukset",
+      "Sisäiset palaverit",
+      "Laskutettava tuntityö",
+      "Happihyppely"
+    ]);
+
+  }
     
   else if ( user == "Jarkko Wallenius" ) {
 
@@ -948,6 +972,28 @@ function naytaKaikkienKohteet_stats() {
       "Sisäiset palaverit"
     ]);
     
+  }
+
+  else if ( user == "Kaisa Saano" ) {
+
+    naytaKohteet_stats([
+      "Töissä",
+      "Tietojärjestelmät - Kehitys",
+      "Tietojärjestelmät - Tuki",
+      "LOVe - Ylläpito",
+      "LOVe - Tuki",
+      "LOVe - Sisällöntuotanto",
+      "Muut verkkokurssit - Ylläpito",
+      "Muut verkkokurssit - Tuki",
+      "Muut verkkokurssit - Sisällöntuotanto",
+      "Muut tuotteet - Kehitys",
+      "Muut tuotteet - Tuki",
+      "Sopimukset & tarjoukset",
+      "Sisäiset palaverit",
+      "Laskutettava tuntityö",
+      "Happihyppely"
+    ]);
+
   }
   
   else if ( user == "Jarkko Wallenius" ) {
