@@ -1,14 +1,14 @@
 <?php
 
-  session_start();
+session_start();
 
-  include "functions.php";
+$user = $_SESSION["user"];
+$date = $_SESSION["date_today"];
 
-  $name = $_REQUEST["name"];
-  $date = $_REQUEST["date"];
-  
-  $output = getTimers($name, $date);
+include "functions.php";
 
-  echo $output;
+$output = getTimers($user, $date);
+
+echo $output;
   
 ?>

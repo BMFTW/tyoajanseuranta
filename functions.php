@@ -2,11 +2,11 @@
 
 include "SimpleXLSXGen.php";
 
-$server = "83.150.87.73";
-$db     = "master";
-$user   = "haipro";
-$pwd    = "haipro";
-$table  = "tyoajanseuranta";
+$server  = "83.150.87.73";
+$db      = "master";
+$db_user = "haipro";
+$db_pwd  = "haipro";
+$table   = "tyoajanseuranta";
 
 $tyokohteet = [
 
@@ -56,22 +56,22 @@ $tyokohteet_tyoaikaaNostattavat = array_filter($tyokohteet, function($value) { r
 
 $tuntipalkalliset = array("Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano");
 
-function getTimers($name, $date) {
+function getTimers($user, $date) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet;
 
-  if ( $name == "" || $name == "undefined" ) {
+  if ( $user == "" || $user == "undefined" ) {
     return false;
   }
 
-  $name = str_replace("_", " ", $name);
+  $user = str_replace("_", " ", $user);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $sql = "SELECT timers FROM $table WHERE nimi = ? AND pvm = ?";
 
   $result = $conn -> prepare($sql);
-  $result -> execute([$name, $date]);
+  $result -> execute([$user, $date]);
   $result = $result -> fetch();
 
   if ( empty($result) ) {
@@ -82,10 +82,10 @@ function getTimers($name, $date) {
     $timers .= " ]";
 
     $sql_insert = "INSERT INTO $table (nimi, pvm, " . implode(", ", $tyokohteet) . ", poissa, sairas, loma, timers) VALUES (?, ?, " . str_repeat( "0, ", count($tyokohteet) + 3 ) . "?)";
-    $conn -> prepare($sql_insert) -> execute([$name, $date, $timers]);
+    $conn -> prepare($sql_insert) -> execute([$user, $date, $timers]);
 
     $result = $conn -> prepare($sql);
-    $result -> execute([$name, $date]);
+    $result -> execute([$user, $date]);
     $result = $result -> fetch();
 
   }
@@ -96,53 +96,50 @@ function getTimers($name, $date) {
 
 }
 
-function saveTimers($name, $date, $timers) {
+function saveTimers($user, $date, $timers) {
 
-  global $server, $db, $user, $pwd, $table;
+  global $server, $db, $db_user, $db_pwd, $table;
 
-  $name = str_replace("_", " ", $name);
+  $user = str_replace("_", " ", $user);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $sql = "UPDATE $table SET timers = ? WHERE nimi = ? AND pvm = ?";
 
-  $conn -> prepare($sql) -> execute([$timers, $name, $date]);
+  $conn -> prepare($sql) -> execute([$timers, $user, $date]);
 
 }
 
-function deleteEntry($name, $date) {
+function deleteEntry($user, $date) {
 
-  global $server, $db, $user, $pwd, $table;
+  global $server, $db, $db_user, $db_pwd, $table;
 
-  $name = str_replace("_", " ", $name);
+  $user = str_replace("_", " ", $user);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $sql = "DELETE FROM $table WHERE nimi = ? AND pvm = ?";
 
-  $conn -> prepare($sql) -> execute([$name, $date]);
+  $conn -> prepare($sql) -> execute([$user, $date]);
 
 }
 
-function updateData($name, $date, $times, $poissa, $sairas, $loma, $timers) {
+function updateData($user, $date, $times, $poissa, $sairas, $loma, $timers) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet;
 
-  $name = str_replace("_", " ", $name);
-  $name = str_replace("replacethis", "ä", $name);
-
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $sql = "SELECT * FROM $table WHERE nimi = ? AND pvm = ?";
 
   $result = $conn -> prepare($sql);
-  $result -> execute([$name, $date]);
+  $result -> execute([$user, $date]);
   $result = $result -> fetch();
 
   if ( empty($result) ) {
 
     $sql_insert = "INSERT INTO $table (nimi, pvm, " . implode(", ", $tyokohteet) . ", poissa, sairas, loma, timers) VALUES (?, ?, " . str_repeat( "0, ", count($tyokohteet) + 3 ) . "?)";
-    $conn -> prepare($sql_insert) -> execute([$name, $date, $timers]);
+    $conn -> prepare($sql_insert) -> execute([$user, $date, $timers]);
 
   }
 
@@ -154,20 +151,21 @@ function updateData($name, $date, $times, $poissa, $sairas, $loma, $timers) {
 
   $sql .= "poissa = $poissa, sairas = $sairas, loma = $loma WHERE nimi = ? AND pvm = ?";
 
-  $conn -> prepare($sql) -> execute([$name, $date]);
+  $conn -> prepare($sql) -> execute([$user, $date]);
 
   if ( $timers != "" )
-    saveTimers($name, $date, $timers);
+    saveTimers($user, $date, $timers);
 
 }
 
-function getStats($name, $day, $month, $year, $salary_period) {
+function getStats($user, $day, $month, $year, $person, $salary_period) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet;
 
-  $name = str_replace("_", " ", $name);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  if ( $person == "0" )
+    $user = "";
 
   $sql = "SELECT ";
 
@@ -179,42 +177,42 @@ function getStats($name, $day, $month, $year, $salary_period) {
 
   $sql .= " FROM $table ";
 
-  if ( $salary_period == "" ) {
+  if ( $salary_period == "0" ) {
 
-    if ( $name != '' && $day == '' && $month == '' && $year == '' )
-      $sql .= "WHERE nimi = '$name'";
-    else if ( $name == '' && $day !== '' && $month == '' && $year == '' )
+    if ( $user != '' && $day == '' && $month == '' && $year == '' )
+      $sql .= "WHERE nimi = '$user'";
+    else if ( $user == '' && $day !== '' && $month == '' && $year == '' )
       $sql .= "WHERE pvm LIKE '$day.%.%'";
-    else if ( $name !== '' && $day !== '' && $month == '' && $year == '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '$day.%.%'";
-    else if ( $name == '' && $day == '' && $month !== '' && $year == '' )
+    else if ( $user !== '' && $day !== '' && $month == '' && $year == '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '$day.%.%'";
+    else if ( $user == '' && $day == '' && $month !== '' && $year == '' )
       $sql .= "WHERE pvm LIKE '%.$month.%'";
-    else if ( $name !== '' && $day == '' && $month !== '' && $year == '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '%.$month.%'";
-    else if ( $name == '' && $day !== '' && !$month == '' && $year == '' )
+    else if ( $user !== '' && $day == '' && $month !== '' && $year == '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '%.$month.%'";
+    else if ( $user == '' && $day !== '' && !$month == '' && $year == '' )
       $sql .= "WHERE pvm LIKE '$day.$month.%'";
-    else if ( $name !== '' && $day !== '' && $month !== '' && $year == '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '$day.$month.%'";
-    else if ( $name == '' && $day == '' && $month == '' && $year !== '' )
+    else if ( $user !== '' && $day !== '' && $month !== '' && $year == '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '$day.$month.%'";
+    else if ( $user == '' && $day == '' && $month == '' && $year !== '' )
       $sql .= "WHERE pvm LIKE '%.%.$year'";
-    else if ( $name !== '' && $day == '' && $month == '' && $year !== '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '%.%.$year'";
-    else if ( $name == '' && $day !== '' && $month == '' && $year !== '' )
+    else if ( $user !== '' && $day == '' && $month == '' && $year !== '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '%.%.$year'";
+    else if ( $user == '' && $day !== '' && $month == '' && $year !== '' )
       $sql .= "WHERE pvm LIKE '$day.%.$year'";
-    else if ( $name !== '' && !$day == '' && $month == '' && $year !== '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '$day.%.$year'";
-    else if ( $name == '' && $day == '' && $month !== '' && $year !== '' )
+    else if ( $user !== '' && !$day == '' && $month == '' && $year !== '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '$day.%.$year'";
+    else if ( $user == '' && $day == '' && $month !== '' && $year !== '' )
       $sql .= "WHERE pvm LIKE '%.$month.$year'";
-    else if ( $name !== '' && $day == '' && $month !== '' && $year !== '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '%.$month.$year'";
-    else if ( $name == '' && $day !== '' && $month !== '' && $year !== '' )
+    else if ( $user !== '' && $day == '' && $month !== '' && $year !== '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '%.$month.$year'";
+    else if ( $user == '' && $day !== '' && $month !== '' && $year !== '' )
       $sql .= "WHERE pvm LIKE '$day.$month.$year'";
-    else if ( $name !== '' && $day !== '' && $month !== '' && $year !== '' )
-      $sql .= "WHERE nimi = '$name' AND pvm LIKE '$day.$month.$year'";
+    else if ( $user !== '' && $day !== '' && $month !== '' && $year !== '' )
+      $sql .= "WHERE nimi = '$user' AND pvm LIKE '$day.$month.$year'";
 
   }
   
-  if ( $salary_period == 1 ) {
+  if ( $salary_period == "1" ) {
 
     if ( $day <= 25 ) {
 
@@ -248,7 +246,7 @@ function getStats($name, $day, $month, $year, $salary_period) {
     if ( ( $day >= 24 && $month == 2 && $year == 2022 ) || ( $day <= 25 && $month == 3 && $year == 2022 ) )
       $day1 = 24;
 
-    $sql .= "WHERE nimi = '$name'";
+    $sql .= "WHERE nimi = '$user'";
     $sql .= " AND ";
     $sql .= "CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, '$day1.$month1.$year1', 104)";
     $sql .= " AND ";
@@ -282,20 +280,18 @@ function getStats($name, $day, $month, $year, $salary_period) {
 
 }
 
-function liukuma($name, $date_start, $date_end) {
+function liukuma($user, $date_start, $date_end) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet_tyoaikaaNostattavat;
 
-  $name = str_replace("_", " ", $name);
-
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $sql  = "SELECT SUM(" . implode(" + ", $tyokohteet_tyoaikaaNostattavat) . ") AS sum FROM $table ";
   $sql .= "WHERE nimi = ? AND poissa != 1 AND loma != 1 AND ";
   $sql .= "CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104)";
 
   $sum = $conn -> prepare($sql);
-  $sum -> execute([$name, $date_start, $date_end]);
+  $sum -> execute([$user, $date_start, $date_end]);
   $sum = $sum -> fetch();
   $sum = $sum["sum"];
   $sum = ( $sum != "" ) ? $sum : 0;
@@ -308,7 +304,7 @@ function liukuma($name, $date_start, $date_end) {
   $sql .= "DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) NOT IN ('Saturday', 'Sunday')";
 
   $poissa = $conn -> prepare($sql);
-  $poissa -> execute([$name, $date_start, $date_end]);
+  $poissa -> execute([$user, $date_start, $date_end]);
   $poissa = $poissa -> fetch();
   $poissa = $poissa["poissa"];
   $poissa = ( $poissa != "" ) ? $poissa : 0;
@@ -320,7 +316,7 @@ function liukuma($name, $date_start, $date_end) {
   $sql .= "DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) NOT IN ('Saturday', 'Sunday')";
 
   $sairas = $conn -> prepare($sql);
-  $sairas -> execute([$name, $date_start, $date_end]);
+  $sairas -> execute([$user, $date_start, $date_end]);
   $sairas = $sairas -> fetch();
   $sairas = $sairas["sairas"];
   $sairas = ( $sairas != "" ) ? $sairas : 0;
@@ -332,7 +328,7 @@ function liukuma($name, $date_start, $date_end) {
   $sql .= "DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) NOT IN ('Saturday', 'Sunday')";
 
   $loma = $conn -> prepare($sql);
-  $loma -> execute([$name, $date_start, $date_end]);
+  $loma -> execute([$user, $date_start, $date_end]);
   $loma = $loma -> fetch();
   $loma = $loma["loma"];
   $loma = ( $loma != "" ) ? $loma : 0;
@@ -347,11 +343,11 @@ function liukuma($name, $date_start, $date_end) {
 
 function liukumat($date_start, $date_end) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet_tyoaikaaNostattavat;
 
   $TBL2_tyokohteet_tyoaikaaNostattavat = preg_filter("/^/", "TBL2.", $tyokohteet_tyoaikaaNostattavat);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $sql_sum = "
 
@@ -503,13 +499,13 @@ function liukumat($date_start, $date_end) {
 
 }
 
-function chart2($name, $day, $month, $year) {
+function chart2($user, $day, $month, $year) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet_tyoaikaaNostattavat;
 
-  $name = str_replace("_", " ", $name);
+  $user = str_replace("_", " ", $user);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   $day1 = 26;
   $day2 = 25;
@@ -583,7 +579,7 @@ function chart2($name, $day, $month, $year) {
   ";
 
   $result = $conn -> prepare($sql);
-  $result -> execute([$name]);
+  $result -> execute([$user]);
   $result = $result -> fetchAll();
 
   $output = array();
@@ -595,7 +591,7 @@ function chart2($name, $day, $month, $year) {
   }
 
   $result2 = $conn -> prepare($sql2);
-  $result2 -> execute([$name]);
+  $result2 -> execute([$user]);
   $result2 = $result2 -> fetchAll();
 
   foreach ( $result2 as $row ) {
@@ -626,7 +622,7 @@ function chart2($name, $day, $month, $year) {
 
 function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
 
-  global $server, $db, $user, $pwd, $table, $tyokohteet_tyoaikaaNostattavat, $tuntipalkalliset;
+  global $server, $db, $db_user, $db_pwd, $table, $tyokohteet_tyoaikaaNostattavat, $tuntipalkalliset;
 
   $TBL2_tyokohteet_tyoaikaaNostattavat = preg_filter("/^/", "TBL2.", $tyokohteet_tyoaikaaNostattavat);
 
@@ -635,7 +631,7 @@ function report($day, $month, $year, $num_work_days, $holidays, $liukumat) {
   $holidays = preg_filter("/$/", "'", $holidays);
   $holidays = implode(",", $holidays);
 
-  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $user, $pwd);
+  $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
   if ( $day <= 25 ) {
 

@@ -1,14 +1,14 @@
 <?php
 
-  session_start();
+session_start();
 
-  include "functions.php";
+$date_start = $_REQUEST["date_start"];
+$date_end   = $_REQUEST["date_end"];
 
-  $date_start = $_REQUEST["date_start"];
-  $date_end   = $_REQUEST["date_end"];
+include "functions.php";
 
-  $output = liukumat($date_start, $date_end);
+$output = liukumat($date_start, $date_end);
 
-  echo $output;
+echo $output;
   
 ?>

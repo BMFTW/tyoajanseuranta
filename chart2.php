@@ -1,12 +1,19 @@
 <?php
 
-include "functions.php";
+session_start();
 
-$name  = $_REQUEST["name"];
+$user          = $_SESSION["user"];
+$user          = $_REQUEST["user2"] != "0" && $_REQUEST["user2"] != "1" ? $_REQUEST["user2"] : $user;
+$user          = str_replace("_", " ", $user);
+
 $day   = $_REQUEST["day"];
 $month = $_REQUEST["month"];
 $year  = $_REQUEST["year"];
 
-echo chart2($name, $day, $month, $year);
+include "functions.php";
+
+$output =  chart2($user, $day, $month, $year);
+
+echo $output;
   
 ?>

@@ -6,26 +6,8 @@ var tyontekijat          = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto"
 var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano"];
 var kuukausipalkalliset  = tyontekijat.filter( tyontekija => !tuntipalkalliset.includes(tyontekija) );
 
-var userID               = getUrlParameter("userID");
-var userID2              = getUrlParameter("userID2");
-var person               = getUrlParameter("person");
-var day                  = getUrlParameter("day");
-var month                = getUrlParameter("month");
-var year                 = getUrlParameter("year");
-var edit                 = getUrlParameter("edit");
-var salary_period        = getUrlParameter("salary_period");
-
-var userIDs              = ["594585", "3358000", "1719150", "2294025", "1776090", "2420680", "928560", "2565585", "2353520", "3300695", "113515", "815775", "3559115", "913230", "2913065", "1334440", "2815245"];
-
-var user                 = getName(userID);
-var user_                = getName(userID, "_");
-
-var user2                = getName(userID2);
-var user2_               = getName(userID2, "_");
-
-var day_today            = new Date().getDate();
-var month_today          = new Date().getMonth() + 1;
-var year_today           = new Date().getFullYear();
+var user = document.getElementById("user");
+if ( user ) { user = user.innerHTML; }
 
 var holidays_2021        = ["1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "1.5.2021", "13.5.2021", "25.6.2021", "26.6.2021", "6.12.2021", "24.12.2021", "25.12.2021", "26.12.2021"];
 var holidays_2022        = ["6.1.2022", "15.4.2022", "18.4.2022", "26.5.2022", "6.12.2022", "26.12.2022"];
@@ -37,59 +19,11 @@ var uniqueID             = new Date().getTime();
 var green                = "#28a745";
 var yellow               = "#ffc107";
 
-var users = { 
-  "594585"  : "Roope Anttila",
-  "3358000" : "Valtteri Anttila",
-  "1719150" : "Heli Haavisto",
-  "2294025" : "Elina Hanslian",
-  "1776090" : "Mirelle Kangas",
-  "2420680" : "Otto Kontio",
-  "928560"  : "Simo Korpela",
-  "2565585" : "Eeli Kuosmanen",
-  "2353520" : "Tuukka Monto",
-  "3300695" : "Elisa Mäkinen",
-  "113515"  : "Riikka Panu",
-  "815775"  : "Oskari Riihimäki",
-  "3559115" : "Heli Rokkonen",
-  "913230"  : "Emma Ruotsalainen",
-  "2913065" : "Jaakko Saano",
-  "1334440" : "Kaisa Saano",
-  "2815245" : "Jarkko Wallenius"
-};
-
-// Functions
-function getName( userID, underscore = "" ) {
-
-  var users = { 
-    "594585"  : "Roope Anttila",
-    "3358000" : "Valtteri Anttila",
-    "1719150" : "Heli Haavisto",
-    "2294025" : "Elina Hanslian",
-    "1776090" : "Mirelle Kangas",
-    "2420680" : "Otto Kontio",
-    "928560"  : "Simo Korpela",
-    "2565585" : "Eeli Kuosmanen",
-    "2353520" : "Tuukka Monto",
-    "3300695" : "Elisa Mäkinen",
-    "113515"  : "Riikka Panu",
-    "815775"  : "Oskari Riihimäki",
-    "3559115" : "Heli Rokkonen",
-    "913230"  : "Emma Ruotsalainen",
-    "2913065" : "Jaakko Saano",
-    "1334440" : "Kaisa Saano",
-    "2815245" : "Jarkko Wallenius"
-  };
-
-  var name = userID != "" ? users[userID] : "";
-
-  if ( underscore == "_" )
-    name = name.replace(" ", "_");
-
-  return name;
-
-}
-
 function getDate() {
+
+  var day_today   = new Date().getDate();
+  var month_today = new Date().getMonth() + 1;
+  var year_today  = new Date().getFullYear();
 
   return day_today + "." + month_today + "." + year_today;
 
@@ -106,29 +40,6 @@ function tuntityontekija(user) {
   return !kuukausipalkalliset.includes(user);
 
 }
-
-function getUrlParameter(param) {
-
-  var queryString = window.location.search.substring(1);
-  var queries     = queryString.split("&");
-  var key, value, i;
-
-  for ( i = 0; i < queries.length; i++ ) {
-
-    key_value = queries[i].split("=");
-
-    key   = key_value[0];
-    value = key_value[1];
-
-    if ( key == param ) {
-      return value;
-    }
-
-  }
-
-  return "";
-
-};
 
 function asQueryParameter(input) {
   return input.toLowerCase().replace(/<br>/g, "").replace(/ä/g, "a").replace(/ö/g, "o").replace(/\W+/g, "_").replace(/tietojarjestelmat/g, "tj");
@@ -237,32 +148,6 @@ function naytaKohteet_index(kohteet) {
   var arr = ["Tietojärjestelmät - Kehitys", "LOVe - Ylläpito", "Muut verkkokurssit - Ylläpito", "Muut tuotteet - Kehitys", "Palkallinen poissaolo"];
 
   arr.forEach(hide_headers_dividers);
-
-}
-
-function naytaKohteet_stats(kohteet) {
-  
-  for ( var i = 0; i < kohteet.length; i++ ) {
-    var element = "#tyokohde" + (i + 1);
-    var kohde = kohteet[i];
-    $(element).find("h3").text(kohde);
-  }
-
-  var piilota_kohteet = kaikki_kohteet_stats.filter( kohde => !kohteet.includes(kohde) );
-
-  for ( var i = 0; i < piilota_kohteet.length; i++ ) {
-    var element = "#tyokohde" + ( kohteet.length + i + 1 );
-    var kohde = piilota_kohteet[i];
-    $(element).hide().find("h3").text(kohde);
-  }
-
-  if ( tuntityontekija(user) ) {
-    $("#liukumavahennys").parent().css("display", "none");
-    $("#lounastauko").parent().removeClass("col-sm-6").addClass("col-sm-12");
-  }
-  
-  $("#liukumavahennys").find("h3").text("Liukumavähennys");
-  $("#lounastauko").find("h3").text("Lounastauko");
 
 }
 
@@ -801,7 +686,7 @@ function naytaKaikkienKohteet_stats() {
     ]);
 
   }
-
+  
   else if ( user == "Simo Korpela" ) {
     
     naytaKohteet_stats([
@@ -1042,20 +927,46 @@ function naytaKaikkienKohteet_stats() {
 
 }
 
+function naytaKohteet_stats(kohteet) {
+
+  for (var i = 0; i < kohteet.length; i++) {
+    var element = "#tyokohde" + (i + 1);
+    var kohde = kohteet[i];
+    $(element).find("h3").text(kohde);
+  }
+
+  var piilota_kohteet = kaikki_kohteet_stats.filter(kohde => !kohteet.includes(kohde));
+
+  for (var i = 0; i < piilota_kohteet.length; i++) {
+    var element = "#tyokohde" + (kohteet.length + i + 1);
+    var kohde = piilota_kohteet[i];
+    $(element).hide().find("h3").text(kohde);
+  }
+
+  if (tuntityontekija(user)) {
+    $("#liukumavahennys").parent().css("display", "none");
+    $("#lounastauko").parent().removeClass("col-sm-6").addClass("col-sm-12");
+  }
+
+  $("#liukumavahennys").find("h3").text("Liukumavähennys");
+  $("#lounastauko").find("h3").text("Lounastauko");
+
+}
+
 // https://gist.github.com/ScottKaye/5158488#file-hide-url-parameters-js
-function hideURLParams() {
+// function hideURLParams() {
   
   function getUrlParameter2(name) {
     return decodeURI((RegExp(name + "=" + "(.+?)(&|$)").exec(location.search)||[,null])[1]);
   }
 
-  var hide = ["userID", "person", "day", "month", "year", "edit", "uniqueID"];
+//   var hide = ["userID", "person", "day", "month", "year", "edit", "uniqueID"];
   
-	for ( var h in hide )
-		if ( getUrlParameter2(h) ) 
-			history.replaceState(null, document.getElementsByTagName("title")[0].innerHTML, window.location.pathname);
+// 	for ( var h in hide )
+// 		if ( getUrlParameter2(h) ) 
+// 			history.replaceState(null, document.getElementsByTagName("title")[0].innerHTML, window.location.pathname);
 	
-}
+// }
 
 function isDateObject(date) {
   return typeof date.getMonth === 'function';
@@ -1171,6 +1082,6 @@ function showNotification() {
   })
 }
 
-setTimeout( () => {
-  hideURLParams();
-}, 500);
+// setTimeout( () => {
+//   hideURLParams();
+// }, 500);

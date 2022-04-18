@@ -1,3 +1,13 @@
+<?php
+
+session_start();
+
+if ( !isset( $_SESSION["user"] ) ) {
+  header("Location: login.php");
+}
+
+?>
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -17,8 +27,8 @@
   
   		<!-- JavaScript -->
   		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  		<script src = "vars_funs.js?v=133"></script>
-  		<script src = "index.js?v=133"></script>
+  		
+  		<script src = "main.js?<?php echo filemtime("main.js"); ?>"></script>
     	<script src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   		<script src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   
@@ -45,7 +55,7 @@
 				display: none;
 			}
 
-			#cancel_stats_save {
+			#logout_stats_save {
 				white-space: nowrap;
 			}
   
@@ -58,12 +68,13 @@
     </head>
 
     <body>
-  
+
+
     	<!-- Jumbotron -->
     	<div class = "jumbotron text-center">
     		<img src = "logo.png">
 			<h5>Työajanseurantajärjestelmä</h5>
-			<script>document.write( getName(userID) + " - " + getDate() );</script>
+			<?php echo $_SESSION["user"] . " - " . $_SESSION["date_today"] ?>
     	</div>
   
   		<!-- Body -->
@@ -209,14 +220,38 @@
 			<!-- --- -->
 			<hr style = "width:40%">
 	
-			<!-- Peruuta, tilastot, tallenna -->
-			<div class = "row group2" id = "cancel_stats_save">
+			<!-- Kirjaudu ulos, tilastot, tallenna -->
+			<div class = "row group2" id = "logout_stats_save">
 
-				<div class = "col-sm-12">
-					<button type = "button" id = "cancel" class = "btn btn-danger">  Peruuta  </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<button type = "button" id = "stats"  class = "btn btn-dark">    Tilastot </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<button type = "button" id = "save"   class = "btn btn-success"> Tallenna </button>
+				<div class = "col-md-12">
+					<button type = "button" id = "logout" class = "btn btn-danger"> Kirjaudu ulos </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type = "submit" form = "stats_form" id = "stats" class = "btn btn-dark">Tilastot</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type = "submit" form = "save_form" id = "save" class = "btn btn-success">Tallenna</button>
 				</div>
+
+				<form method = "post" id = "stats_form" action = "stats.php">
+
+					<input type = "hidden" name = "day"           value = "<?php echo date('d'); ?>">
+					<input type = "hidden" name = "month"         value = "<?php echo date('n'); ?>">
+					<input type = "hidden" name = "year"          value = "<?php echo date('Y'); ?>">
+					<input type = "hidden" name = "person"        value = "1">
+					<input type = "hidden" name = "edit"          value = "0">
+					<input type = "hidden" name = "salary_period" value = "0">
+					<input type = "hidden" name = "user2"         value = "0">
+
+				</form>
+
+				<form method = "post" id = "save_form" action = "stats.php">
+
+					<input type = "hidden" name = "day"           value = "<?php echo date('d'); ?>">
+					<input type = "hidden" name = "month"         value = "<?php echo date('n'); ?>">
+					<input type = "hidden" name = "year"          value = "<?php echo date('Y'); ?>">
+					<input type = "hidden" name = "person"        value = "1">
+					<input type = "hidden" name = "edit"          value = "0">
+					<input type = "hidden" name = "salary_period" value = "0">
+					<input type = "hidden" name = "user2"         value = "0">
+
+				</form>
 
 			</div>
 	
@@ -224,12 +259,15 @@
 			<div class = "row hidden">
 
 				<div class = "col-sm-12">
-					<p id = "initialize">   </p>
-					<p id = "get_timers">   </p>
-					<p id = "save_timers">  </p>
-					<p id = "delete_entry"></p>
-					<p id = "update_data">  </p>
+					<p id = "initialize">  </p>
+					<p id = "user"><?php echo $_SESSION["user"]?></p>
+					<p id = "get_timers">  </p>
+					<p id = "save_timers"> </p>
+					<p id = "logout_php">  </p>
+					<p id = "update_data"> </p>
 				</div>
+
+				<script src = "vars_funs.js?<?php echo filemtime("vars_funs.js"); ?>"></script>
 
 			</div>
   		     

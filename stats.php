@@ -1,3 +1,13 @@
+<?php
+
+session_start();
+
+if ( !isset( $_SESSION["user"] ) ) {
+  header("Location: login.php");
+}
+
+?>
+
 <!DOCTYPE html>
 
 <html lang = "en">
@@ -18,8 +28,7 @@
 
         <!-- JavaScript -->
         <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src = "vars_funs.js?v=133"></script>
-        <script src = "stats.js?v=133"></script>
+        <script src = "stats.js?<?php echo filemtime("stats.js"); ?>"></script>
         <script src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
@@ -56,12 +65,21 @@
 				margin-bottom: -25px;
 			}
 
-			#return_salary_period_edit, #away_sick_holiday, #cancel_edits_save_edits {
+			#cancel_edits_save_edits {
+				margin-top: 35px;
+				margin-bottom: 35px;
+			}
+
+			#return_salary_period_edit, #away_sick_holiday {
 				margin-top: 35px; margin-bottom: 35px;
 			}
 
-			#remove_this_day, #return_salary_period_edit, #away_sick_holiday, #cancel_edits_save_edits {
+			#remove_this_day, #return_salary_period_edit, #away_sick_holiday {
 				white-space: nowrap;
+			}
+
+			#return_salary_period_edit {
+				margin-left: 15px;
 			}
 
 			#prev_next {
@@ -99,12 +117,12 @@
     </head>
     
     <body>
-    
+
         <!-- Header -->
         <div class = "jumbotron text-center" id = "header">
             <img src = "logo.png">
             <h5>Työajanseurantajärjestelmä</h5>
-            <script>document.write( getName(userID) + " - " + getDate() );</script>
+            <?php echo $_SESSION["user"] . " - " . $_SESSION["date_today"]; ?>
         </div>
     
 		<!-- Menu -->
@@ -117,16 +135,16 @@
                 <div class = "col-sm-12">
                     <div>
                         <h3 id = "section"></h3>
-                        <h4 id = "name"></h4>
+                        <h4 id = "user"><?php echo $_SESSION["user"] ?></h4>
                         <h4 id = "date"></h4>
                     </div>
                 </div>
             </div>
 
             <!-- Suodata -->
-            <div class = "row" id = "filter" >
-                <button type = "button" class = "btn btn-info mx-auto">Suodata</button>
-            </div>
+			<div class = "row" id = "filter" >
+				<button type = "button" class = "btn btn-info mx-auto">Suodata</button>
+			</div>
 
             <!-- Edellinen, seuraava -->
             <div class = "row" id = "prev_next">
@@ -148,8 +166,8 @@
 						<div class = "form-group">
 							<label for = "person">Henkilö</label>
 							<select class = "form-control mx-auto" id = "person" style = "width:auto;">
-								<option value = "">    Kaikki </option>
-								<option value = "1">                </option>
+								<option value = "0"> Kaikki </option>
+								<option value = "1">        </option>
 							</select>
 						</div>
 					</div>
@@ -251,8 +269,28 @@
 
 				<!-- Näytä -->
 				<div class = "row">
-					<button type = "button" id = "show" class = "btn btn-info mx-auto">Näytä</button>
+
+					<div class = "col-md-12">
+
+						<button type = "submit" form = "show_form" id = "show" class = "btn btn-info">Suodata</button>
+						
+						<form method = "post" id = "show_form" action = "stats.php">
+
+							<input type = "hidden" name = "day"           value = "<?php echo $_POST["day"] ?>">
+							<input type = "hidden" name = "month"         value = "<?php echo $_POST["month"] ?>">
+							<input type = "hidden" name = "year"          value = "<?php echo $_POST["year"] ?>">
+							<input type = "hidden" name = "person"        value = "1">
+							<input type = "hidden" name = "edit"          value = "0">
+							<input type = "hidden" name = "salary_period" value = "0">
+							<input type = "hidden" name = "user2"         value = "0">
+
+						</form>
+
+					</div>
+
 				</div>
+
+				
 				
 				<hr id = "4">
 
@@ -743,25 +781,97 @@
 
 			<!-- Palaa, palkanmaksujakso, muokkaa -->
 			<div class = "row" id = "return_salary_period_edit">
-				<div class = "col-sm-12">
-					<button type = "button" id = "return"        class = "btn btn-danger">  Palaa            </button> &nbsp;&nbsp;&nbsp;
-					<button type = "button" id = "salary_period" class = "btn btn-info">    Palkanmaksujakso </button> &nbsp;&nbsp;&nbsp;
-					<button type = "button" id = "edit"          class = "btn btn-success"> Muokkaa          </button>
+
+				<div class = "col-md-12">
+
+					<!-- Palaa -->
+					<button type = "submit" form = "return_form" id = "return" class = "btn btn-danger">Palaa</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+					<!-- Palkanmaksujakso -->
+					<button type = "submit" form = "salary_period_form" id = "salary_period" class = "btn btn-info">Palkanmaksujakso</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+					<!-- Muokkaa -->
+					<button type = "submit" form = "edit_form" id = "edit" class = "btn btn-success">Muokkaa</button>
+
+					<form method = "post" id = "return_form" action = "stats.php">
+
+						<input type = "hidden" name = "day"           value = "">
+						<input type = "hidden" name = "month"         value = "">
+						<input type = "hidden" name = "year"          value = "">
+						<input type = "hidden" name = "person"        value = "">
+						<input type = "hidden" name = "edit"          value = "">
+						<input type = "hidden" name = "salary_period" value = "">
+						<input type = "hidden" name = "user2"         value = "">
+
+					</form>
+
+					<form method = "post" id = "salary_period_form" action = "stats.php">
+
+						<input type = "hidden" name = "day"           value = "">
+						<input type = "hidden" name = "month"         value = "">
+						<input type = "hidden" name = "year"          value = "">
+						<input type = "hidden" name = "person"        value = "">
+						<input type = "hidden" name = "edit"          value = "">
+						<input type = "hidden" name = "salary_period" value = "">
+						<input type = "hidden" name = "user2"         value = "">
+
+					</form>
+
+
+					<form method = "post" id = "edit_form" action = "stats.php">
+
+						<input type = "hidden" name = "day"           value = "<?php echo $_POST["day"] ?>">
+						<input type = "hidden" name = "month"         value = "<?php echo $_POST["month"] ?>">
+						<input type = "hidden" name = "year"          value = "<?php echo $_POST["year"] ?>">
+						<input type = "hidden" name = "person"        value = "1">
+						<input type = "hidden" name = "edit"          value = "1">
+						<input type = "hidden" name = "salary_period" value = "0">
+						<input type = "hidden" name = "user2"         value = "0">
+
+					</form>
+
 				</div>
+
 			</div>
 
 			<!-- Peruuta, tallenna -->
 			<div class = "row" id = "cancel_edits_save_edits">
-				<div class = "col-sm-12">
-					<button type = "button" id = "cancel_edits" class = "btn btn-danger">  Peruuta  </button> &nbsp;&nbsp;&nbsp;
-					<button type = "button" id = "save_edits"   class = "btn btn-success"> Tallenna </button>
-				</div>
+
+				<!-- Peruuta -->
+				<button type = "submit" form = "cancel_edits_form" id = "cancel_edits" class = "btn btn-danger">Peruuta</button> &nbsp;&nbsp;&nbsp;
+
+				<!-- Tallenna -->
+				<button type = "submit" form = "save_edits_form" id = "save_edits" class = "btn btn-success">Tallenna</button>
+
+				<form method = "post" id = "cancel_edits_form" action = "stats.php">
+
+					<input type = "hidden" name = "day"           value = "">
+					<input type = "hidden" name = "month"         value = "">
+					<input type = "hidden" name = "year"          value = "">
+					<input type = "hidden" name = "person"        value = "">
+					<input type = "hidden" name = "edit"          value = "">
+					<input type = "hidden" name = "salary_period" value = "">
+					<input type = "hidden" name = "user2"         value = "">
+
+				</form>
+
+				<form method = "post" id = "save_edits_form" action = "stats.php">
+
+					<input type = "hidden" name = "day"           value = "<?php echo $_POST["day"] ?>">
+					<input type = "hidden" name = "month"         value = "<?php echo $_POST["month"] ?>">
+					<input type = "hidden" name = "year"          value = "<?php echo $_POST["year"] ?>">
+					<input type = "hidden" name = "person"        value = "2">
+					<input type = "hidden" name = "edit"          value = "">
+					<input type = "hidden" name = "salary_period" value = "">
+					<input type = "hidden" name = "user2"         value = "">
+
+				</form>		
+
 			</div>
 
-		</div>
-
 		<!-- Hidden data -->
-		<div class = "container hidden" id = "hidden_data">
+		<div class = "container hidden" id = "data">
+
 			<div class = "row">
 				<div class = "col-md-12">
 					<p id = "times_data">   </p>
@@ -771,8 +881,23 @@
 					<p id = "chart2_data">  </p>
 				</div>
 			</div>
+
+			<div class = "row">
+				<input name = "day"           value = "<?php echo $_POST["day"] ?? date('j') ?>"           >
+				<input name = "month"         value = "<?php echo $_POST["month"] ?? date('n') ?>"         >
+				<input name = "year"          value = "<?php echo $_POST["year"] ?? date('Y') ?>"          >
+				<input name = "person"        value = "<?php echo $_POST["person"] ?? '1' ?>"        >
+				<input name = "edit"          value = "<?php echo $_POST["edit"] ?? '0' ?>"          >
+				<input name = "salary_period" value = "<?php echo $_POST["salary_period"] ?? '0' ?>" >
+				<input name = "user2"         value = "<?php echo $_POST["user2"] ?? '0' ?>"         >
+			</div>
+
 		</div>
+
+
+
+		<script src = "vars_funs.js?<?php echo filemtime("vars_funs.js"); ?>"></script>
         
     </body>
 
-</html>
+</html>	

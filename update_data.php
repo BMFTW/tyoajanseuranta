@@ -1,8 +1,9 @@
 <?php
 
-include "functions.php";
+session_start();
 
-$name   = $_REQUEST["name"];
+$user   = $_SESSION["user"];
+
 $date   = $_REQUEST["date"];
 $time1  = $_REQUEST["toissa"];
 $time2  = $_REQUEST["tj_tuki"];
@@ -48,8 +49,9 @@ $sairas = $_REQUEST["sairas"];
 $loma   = $_REQUEST["loma"];
 $timers = isset($_REQUEST["timers"]) ? $_REQUEST["timers"] : "";
 
-$times = [$time1, $time2, $time3, $time4, $time5, $time6, $time7, $time8, $time9, $time10, $time11, $time12, $time13, $time14, $time15, $time16, $time17, $time18, $time19, $time20, $time21, $time22, $time23, $time24, $time25, $time26, $time27, $time28, $time29, $time30, $time31, $time32, $time33, $time34, $time35, $time36, $time37, $time38, $time39];
+$times = [ $time1, $time2, $time3, $time4, $time5, $time6, $time7, $time8, $time9, $time10, $time11, $time12, $time13, $time14, $time15, $time16, $time17, $time18, $time19, $time20, $time21, $time22, $time23, $time24, $time25, $time26, $time27, $time28, $time29, $time30, $time31, $time32, $time33, $time34, $time35, $time36, $time37, $time38, $time39] ;
 
-echo updateData($name, $date, $times, $poissa, $sairas, $loma, $timers);
+include "functions.php";
+updateData($user, $date, $times, $poissa, $sairas, $loma, $timers);
   
 ?>

@@ -1,15 +1,18 @@
 <?php
 
-  session_start();
+session_start();
 
-  include "functions.php";
+$user = $_SESSION["user"];
+$user = $_REQUEST["user2"] != "" && $_REQUEST["user2"] != "0" && $_REQUEST["user2"] != "1" ? $_REQUEST["user2"] : $user;
+$user = str_replace("_", " ", $user);
 
-  $name       = $_REQUEST["name"];
-  $date_start = $_REQUEST["date_start"];
-  $date_end   = $_REQUEST["date_end"];
+$date_start = $_REQUEST["date_start"];
+$date_end   = $_REQUEST["date_end"];
 
-  $output = liukuma($name, $date_start, $date_end);
+include "functions.php";
 
-  echo $output;
-  
+$output = liukuma($user, $date_start, $date_end);
+
+echo $output;
+
 ?>

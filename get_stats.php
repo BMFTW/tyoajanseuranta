@@ -1,17 +1,21 @@
 <?php
 
-  session_start();
+session_start();  
 
-  include "functions.php";
+$user          = $_SESSION["user"];
+$user          = $_REQUEST["user2"] != "0" && $_REQUEST["user2"] != "1" ? $_REQUEST["user2"] : $user;
+$user          = str_replace("_", " ", $user);
 
-  $name            = $_REQUEST["name"];
-  $day             = $_REQUEST["day"];
-  $month           = $_REQUEST["month"];
-  $year            = $_REQUEST["year"];
-  $salary_period   = isset($_REQUEST["salary_period"]) ? $_REQUEST["salary_period"] : "";
+$day           = $_REQUEST["day"];
+$month         = $_REQUEST["month"];
+$year          = $_REQUEST["year"];
+$person        = $_REQUEST["person"];
+$salary_period = $_REQUEST["salary_period"];
 
-  $output = getStats($name, $day, $month, $year, $salary_period);
+include "functions.php";
 
-  echo $output;
+$output = getStats($user, $day, $month, $year, $person, $salary_period);
+
+echo $output;
   
 ?>

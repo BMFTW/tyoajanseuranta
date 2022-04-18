@@ -1,13 +1,33 @@
-$.getScript("vars_funs.js", function() {
-  
-  $(document).ready( function() {
 
-    // -------------------------------------------------------------------------------------
 
-    if ( !userIDs.includes(userID) )  {
-      window.location.href = "login.html";
-      return false;
-    }
+$(document).ready(function () {
+
+  var user = $("#user").text();
+
+  $.getScript("vars_funs.js", function() {
+
+    var day           = $("#data input[name=day]").val();
+    var month         = $("#data input[name=month]").val();
+    var year          = $("#data input[name=year]").val();
+    var person        = $("#data input[name=person]").val();
+    var edit          = $("#data input[name=edit]").val();
+    var salary_period = $("#data input[name=salary_period]").val();
+    var user2         = $("#data input[name=user2]").val();
+
+    person        = person == "" ? "0" : person;
+    edit          = edit == "" ? "0" : edit;
+    salary_period = salary_period == "" ? "0" : salary_period;
+    user2         = user2.trim() == "" ? "0" : user2.replace("_", " ");
+
+    console.log("day: " + day);
+    console.log("month: " + month);
+    console.log("year: " + year);
+    console.log("person: " + person);
+    console.log("edit: " + edit);
+    console.log("salary_period: " + salary_period);
+    console.log("user2: " + user2);
+
+    console.log("----------------------------------------------------------------");
 
     // -------------------------------------------------------------------------------------
 
@@ -16,7 +36,7 @@ $.getScript("vars_funs.js", function() {
     // -------------------------------------------------------------------------------------
 
     // #name
-    person !== "" ? $("#name").text(user) : $("#name").text("Kaikki työntekijät");
+    person !== "0" ? $("#user").text(user) : $("#user").text("Kaikki työntekijät");
     
     // #date
     var months = { 
@@ -54,7 +74,7 @@ $.getScript("vars_funs.js", function() {
     // -------------------------------------------------------------------------------------
 
     $("#person").find("option[value='1']").text(user);
-    person != "" ? $("#person").val("1") : $("#person").val("");
+    person == "1" ? $("#person").val("1") : $("#person").val("0");
     
     $("#day").val(day);
     $("#month").val(month);
@@ -67,13 +87,13 @@ $.getScript("vars_funs.js", function() {
       $("#person").append( new Option("-----------------------", "sep") );
       $("#person").find("option[value=sep]").prop("disabled", true);
 
-      $("#person").append( new Option( "Mirelle Kangas",    "1776090" ) );
-      $("#person").append( new Option( "Otto Kontio",       "2420680" ) );
-      $("#person").append( new Option( "Simo Korpela",      "928560"  ) );
-      $("#person").append( new Option( "Eeli Kuosmanen",    "2565585" ) );
-      $("#person").append( new Option( "Elisa Mäkinen",     "3300695" ) );
-      $("#person").append( new Option( "Oskari Riihimäki",  "815775"  ) );
-      $("#person").append( new Option( "Emma Ruotsalainen", "913230"  ) );
+      $("#person").append( new Option( "Mirelle Kangas"    ) );
+      $("#person").append( new Option( "Otto Kontio"       ) );
+      $("#person").append( new Option( "Simo Korpela"      ) );
+      $("#person").append( new Option( "Eeli Kuosmanen"    ) );
+      $("#person").append( new Option( "Elisa Mäkinen"     ) );
+      $("#person").append( new Option( "Oskari Riihimäki"  ) );
+      $("#person").append( new Option( "Emma Ruotsalainen" ) );
       
     }
 
@@ -116,30 +136,39 @@ $.getScript("vars_funs.js", function() {
       
     }
 
+    $("#person").find("option:gt(2)").each( function() {
+
+      var value = $(this).text().trim().replace(" ", "_");
+
+      $(this).val(value);
+
+    });
+
     // -------------------------------------------------------------------------------------
 
     // Näytä kohteet
     // user / user2?
-    if ( user2 == "" ) {
+    if ( typeof user2 == "undefined" || user2 == "" || user2 == "0" ) {
 
       if ( person == "1" ) {
         naytaKaikkienKohteet_stats();
       } else {
         naytaKohteet_stats(kaikki_kohteet_stats);
-        user_ = "";
       }
+
+      user_2 = "0";
 
     }
     
     else {
 
-      user  = user2;
-      user_ = user2_;
+      user   = user2;
+      user_2 = user2.replace(" ", "_");
 
       naytaKaikkienKohteet_stats();
 
-      $("#name").text(user2);
-      $("#person option:contains(" + user2 + ")").prop("selected", true);
+      $("#user").text(user2);
+      $("#person").find("option:contains(" + user2 + ")").prop("selected", true);
 
       if ( tuntityontekija(user2) ) {
 
@@ -154,10 +183,10 @@ $.getScript("vars_funs.js", function() {
     // -------------------------------------------------------------------------------------
 
     // Get stats
-    $("#times_data").load("get_stats.php?name=" + user_ + "&day=" + day + "&month=" + month + "&year=" + year + "&salary_period=" + salary_period, function () {
+    $("#times_data").load("get_stats.php?day=" + day + "&month=" + month + "&year=" + year + "&person=" + person + "&salary_period=" + salary_period + "&user2=" + user_2, function () {
      
       var times = $(this).text();
-      
+
       times = JSON.parse(times);
         
       var poissa = times["poissa"] !== null ? times["poissa"] : 0;
@@ -165,7 +194,7 @@ $.getScript("vars_funs.js", function() {
       var loma   = times["loma"]   !== null ? times["loma"]   : 0;
 
       // Poissaolo / sairauspoissaolo / loma
-      if ( ( poissa == 1 || sairas == 1 || loma == 1 ) && ( day != "" && month != "" && year != "" ) && ( edit == "" && salary_period == "" ) ) {
+      if ( ( poissa == 1 || sairas == 1 || loma == 1 ) && ( day != "" && month != "" && year != "" ) && ( edit == "0" && salary_period == "0" ) ) {
        
         var txt;
 
@@ -217,7 +246,7 @@ $.getScript("vars_funs.js", function() {
         if ( $(this).parent().prop("id") == "sum" || $(this).parent().css("display") == "none" )
           return true;
 
-        tyokohde = $(this).prev(".task").text();
+        tyokohde = $(this).prev(".task").text(); 
         tyokohde = tyokohde.replace("Tietojärjestelmät", "TJ");
         tyokohde = tyokohde.toLowerCase().replace(/<br>/g, "").replace(/ä/g, "a").replace(/ö/g, "o").replace(/\W+/g, "_");
 
@@ -246,18 +275,18 @@ $.getScript("vars_funs.js", function() {
 
       // -------------------------------------------------------------------------------------
 
-      if ( edit == 1 ) {
+      if ( edit == "1" ) {
 
-        if ( poissa == 1 )
+        if ( poissa == "1" )
           $("#away").click();
-        else if ( sairas == 1 )
+        else if ( sairas == "1" )
           $("#sick").click();
-        else if ( loma == 1 )
+        else if ( loma == "1" )
           $("#holiday").click();
 
       }
 
-      if ( salary_period == 1 ) {
+      if ( salary_period == "1" ) {
 
         $("#aways").find("h3").text("Poissaolot");
         $("#aways").find("h1").text(poissa);
@@ -274,9 +303,9 @@ $.getScript("vars_funs.js", function() {
       }
 
       // -------------------------------------------------------------------------------------
-
       // Liukuma
-      if ( kuukausipalkallinen(user) && person != "" && edit != 1 && ( salary_period != 1 || ( salary_period == 1 && ( month == month_today && year == year_today ) ) ) ) {
+
+      if ( kuukausipalkallinen(user) && person != "0" && edit != "1" && ( salary_period != "1" || ( salary_period == "1" && ( month == ( new Date().getMonth() + 1 ) && year == new Date().getFullYear() ) ) ) ) {
 
         var date_start = "26.4.2021";
 
@@ -290,7 +319,7 @@ $.getScript("vars_funs.js", function() {
 
         var date_end = day + "." + month + "." + year;
 
-        $("#liukuma").load("liukuma.php?name=" + user_ + "&date_start=" + date_start + "&date_end=" + date_end, function() {
+        $("#liukuma").load("liukuma.php?date_start=" + date_start + "&date_end=" + date_end + "&user2=" + user_2, function() {
 
           var input = $(this).text();
           
@@ -335,7 +364,7 @@ $.getScript("vars_funs.js", function() {
         date_yesterday.setDate( date_yesterday.getDate() - 1 );
         date_yesterday = date_yesterday.getDate() + "." + ( date_yesterday.getMonth() + 1 ) + "." + date_yesterday.getFullYear();
 
-        $("#liukuma_edellinen").load("liukuma.php?name=" + user_ + "&date_start=" + date_start + "&date_end=" + date_yesterday, function() {
+        $("#liukuma_edellinen").load("liukuma.php?date_start=" + date_start + "&date_end=" + date_yesterday + "&user2=" + user_2, function() {
 
           var input = $(this).text();
           
@@ -559,7 +588,7 @@ $.getScript("vars_funs.js", function() {
           $("#chart1").hide();
           $("#chart2").show();
   
-          $("#chart2_data").load("chart2.php?name=" + user_ + "&day=" + day + "&month=" + month + "&year=" + year + "&uniqueID=" + uniqueID, function () {
+          $("#chart2_data").load("chart2.php?day=" + day + "&month=" + month + "&year=" + year + "&user2=" + user_2 + "&uniqueID=" + uniqueID, function () {
   
             var times = $(this).text();
   
@@ -719,7 +748,21 @@ $.getScript("vars_funs.js", function() {
 
               }
 
-              window.location.href = "stats.html?userID=" + userID + "&userID2=" + userID2 + "&person=" + person + "&day=" + d + "&month=" + m + "&year=" + y + "&edit=" + "&uniqueID=" + uniqueID;
+              // February & March 2022 exceptions
+              var index = item[0]["_index"];
+
+              if ( $("#date").text().includes("24.2.2022") && index < 2 )
+                m -= 1;
+
+              $("#return_form input[name=day]").val(d);
+              $("#return_form input[name=month]").val(m);
+              $("#return_form input[name=year]").val(y);
+              $("#return_form input[name=person]").val(person);
+              $("#return_form input[name=edit]").val("0");
+              $("#return_form input[name=salary_period]").val("0");
+              $("#return_form input[name=user2]").val(user2);
+
+              $("#return_form").submit();
               
             }
                 
@@ -765,12 +808,12 @@ $.getScript("vars_funs.js", function() {
 
     // Hide / show
 
-    if ( edit == "" && salary_period == "" ) {
+    if ( edit == "0" && salary_period == "0" ) {
       $("#section").text("Tilastot");
       $("hr[id=9]").show();
     }
 
-    if ( edit == 1 ) {
+    if ( edit == "1" ) {
 
       $("#section").text("Tietojen muokkaus");
       $("#away_sick_holiday, hr[id=8], #cancel_edits_save_edits").show();
@@ -811,6 +854,9 @@ $.getScript("vars_funs.js", function() {
       $("#prev_next, #chart2, hr[id=7]").show();
       $("#filter, #edit, #salary_period").hide();
 
+      $("#return_salary_period_edit").find("div:eq(1)").removeClass("col-md-2").addClass("col-md-12");  
+      $("#return").css("margin-left", "25px")
+
       $("#charts").css("margin-bottom", "-20px");
 
       if ( ( user == "Riikka Panu" || user == "Jarkko Wallenius" ) && asDate( day + "." + month + "." + year ) <= asDate( getDate() ) ) {
@@ -822,7 +868,7 @@ $.getScript("vars_funs.js", function() {
       
     }
 
-    if ( day == "" || month == "" || year == "" || user2 != "" )
+    if ( day == "" || month == "" || year == "" || typeof user2 == "undefined" || person != "1" || user2 != "0" )
       $("#edit").hide();
 
     //#endregion
@@ -839,11 +885,16 @@ $.getScript("vars_funs.js", function() {
 
     // Tyhjennä valinnat
     $("#remove").click( function() {
-      $("#person, #day, #month, #year").val("");
+      $("#person").val("0");
+      $("#day, #month, #year").val("");
     });
 
     // Tämä päivä
     $("#this_day").click( function () {
+
+      var day_today   = new Date().getDate();
+      var month_today = new Date().getMonth() + 1;
+      var year_today  = new Date().getFullYear();
   
       $("#day").val(day_today);
       $("#month").val(month_today);
@@ -872,36 +923,87 @@ $.getScript("vars_funs.js", function() {
       }
 
       // Subordinate's data
-      if ( person != "" && person != "1" ) {
-        userID2 = $("#person").val();
+      if ( person == "0" || person == "1" ) {
+        user2 = "";  
+      } else {
+        user2 = $("#person").val();
         person  = 1;
       }
-      else
-        userID2 = "";
 
-      window.location.href = "stats.html?userID=" + userID + "&userID2=" + userID2 + "&person=" + person + "&day=" + day + "&month=" + month + "&year=" + year + "&edit="  +  "&uniqueID=" + uniqueID;
+      $("#show_form input[name=day]").val(day);
+      $("#show_form input[name=month]").val(month);
+      $("#show_form input[name=year]").val(year);
+      $("#show_form input[name=person]").val(person);
+      $("#show_form input[name=edit]").val("0");
+      $("#show_form input[name=salary_period]").val("0");
+      $("#show_form input[name=user2]").val(user2);
+
+      $("#show_form").submit();
 
     });
 
     // Return
     $("#return").click( function() {
 
-      if ( salary_period != 1 )
-        window.location.href = "index.html?userID=" + userID + "&uniqueID=" + uniqueID;
+      if ( salary_period != "1" ) {
+
+        $("#return_form").prop("action", "main.php").submit();
+
+      }
         
-      if ( salary_period == 1 )
-        window.location.href = "stats.html?userID=" + userID + "&userID2=" + userID2 + "&person=" + person + "&day=" + day_today + "&month=" + month_today + "&year=" + year_today + "&edit=" + "&salary_period=" + "&uniqueID=" + uniqueID;
+        
+      else {
+
+        day   = new Date().getDate();
+        month = new Date().getMonth() + 1;
+        year  = new Date().getFullYear();
+
+        $("#return_form input[name=day]").val(day);
+        $("#return_form input[name=month]").val(month);
+        $("#return_form input[name=year]").val(year);
+        $("#return_form input[name=person]").val(person);
+        $("#return_form input[name=edit]").val("0");
+        $("#return_form input[name=salary_period]").val("0");
+        $("#return_form input[name=user2]").val(user2);
+
+        $("#return_form").submit();
+
+      }
         
     });
 
     // Palkanmaksujakso
     $("#salary_period").click( function () {
-      window.location.href = "stats.html?userID=" + userID + "&userID2=" + userID2 + "&person=1" + "&day=" + day_today + "&month=" + month_today + "&year=" + year_today + "&edit=" + "&salary_period=1" + "&uniqueID=" + uniqueID;
+
+      day   = new Date().getDate();
+      month = new Date().getMonth() + 1;
+      year  = new Date().getFullYear();
+
+      $("#salary_period_form input[name=day]").val(day);
+      $("#salary_period_form input[name=month]").val(month);
+      $("#salary_period_form input[name=year]").val(year);
+      $("#salary_period_form input[name=person]").val("1");
+      $("#salary_period_form input[name=edit]").val("0");
+      $("#salary_period_form input[name=salary_period]").val("1");
+      $("#salary_period_form input[name=user2]").val(user2);
+
+      $("#salary_period").submit();
+
     });
 
     // Muokkaa
     $("#edit").click( function() {
-      window.location.href = "stats.html?userID=" + userID + "&person=1" + "&day=" + day + "&month=" + month + "&year=" + year + "&edit=1" + "&uniqueID=" + uniqueID;
+      
+      $("#edit_form input[name=day]").val(day);
+      $("#edit_form input[name=month]").val(month);
+      $("#edit_form input[name=year]").val(year);
+      $("#edit_form input[name=person]").val("1");
+      $("#edit_form input[name=edit]").val("1");
+      $("#edit_form input[name=salary_period]").val("0");
+      $("#edit_form input[name=user2]").val(user2);
+
+      $("#edit").submit();
+
     });
 
     // Click time
@@ -1056,11 +1158,23 @@ $.getScript("vars_funs.js", function() {
 
       }
 
+      $("#cancel_edits_form, #save_edits_form").find("input").prop("disabled", false);
+
     });
 
     // Cancel edits
     $("#cancel_edits").click( function() {
-      window.location.href = "stats.html?userID=" + userID + "&person=1" + "&day=" + day + "&month=" + month + "&year=" + year + "&edit=" + "&uniqueID=" + uniqueID;
+
+      $("#cancel_edits_form input[name=day]").val(day);
+      $("#cancel_edits_form input[name=month]").val(month);
+      $("#cancel_edits_form input[name=year]").val(year);
+      $("#cancel_edits_form input[name=person]").val("1");
+      $("#cancel_edits_form input[name=edit]").val("0");
+      $("#cancel_edits_form input[name=salary_period]").val("0");
+      $("#cancel_edits_form input[name=user2]").val(user2);
+
+      $("#cancel_edits_form").submit();
+
     });
 
     // Save edits
@@ -1070,7 +1184,7 @@ $.getScript("vars_funs.js", function() {
 
         if ( isHoliday( asDate(day + "." + month + "." + year) ) ) {
           alert(day + "." + month + "." + year + " on vapaa-/pyhäpäivä");
-          return;
+          return false;
         }
 
         // if ( asDate(day + "." + month + "." + year).getDay() == 0 ) {
@@ -1081,7 +1195,6 @@ $.getScript("vars_funs.js", function() {
       }
         
       // Name, date
-      user_ = user_.replace(/ä/g, "replacethis");
       var date = day + "." + month + "." + year;
 
       // Timers
@@ -1090,7 +1203,7 @@ $.getScript("vars_funs.js", function() {
       timers = JSON.parse(timers);
 
       // Query string
-      var queryString = "name=" + user_ + "&date=" + date;
+      var queryString = "date=" + date;
       
       $("div[id^=tyokohde], #liukumavahennys, #lounastauko").each( function() {
         
@@ -1178,30 +1291,64 @@ $.getScript("vars_funs.js", function() {
       
       // Update data
       $("#update_data").load("update_data.php?" + queryString, function() {
-        window.location.href = "stats.html?userID=" + userID + "&person=1" + "&day=" + day + "&month=" + month + "&year=" + year + "&edit=" + "&uniqueID=" + uniqueID;
+        
+        $("#save_edits_form input[name=day]").val(day);
+        $("#save_edits_form input[name=month]").val(month);
+        $("#save_edits_form input[name=year]").val(year);
+        $("#save_edits_form input[name=person]").val("1");
+        $("#save_edits_form input[name=edit]").val("0");
+        $("#save_edits_form input[name=salary_period]").val("0");
+        $("#save_edits_form input[name=user2]").val(user2);
+
+        $("#save_edits_form").submit();
+
       });
     
     });
 
     // Edellinen
     $("#prev").click( function() {
+
       month -= 1;
+
       if ( month == 0 ) {
         month = 12;
         year -= 1;
       }
-      window.location.href = "stats.html?userID=" + userID + "&userID2=" + userID2 + "&person=1" + "&day=" + day + "&month=" + month + "&year=" + year + "&edit=" + "&salary_period=1" + "&uniqueID=" + uniqueID;
-    })
+
+      $("#salary_period_form input[name=day]").val(day);
+      $("#salary_period_form input[name=month]").val(month);
+      $("#salary_period_form input[name=year]").val(year);
+      $("#salary_period_form input[name=person]").val("1");
+      $("#salary_period_form input[name=edit]").val("0");
+      $("#salary_period_form input[name=salary_period]").val("1");
+      $("#salary_period_form input[name=user2]").val(user2);
+
+      $("#salary_period_form").submit();
+
+    });
 
     // Seuraava
     $("#next").click( function() {
+
       month += 1;
+
       if ( month == 13 ) {
         month = 1;
         year += 1;
       }
-      window.location.href = "stats.html?userID=" + userID + "&userID2=" + userID2 + "&person=1" + "&day=" + day + "&month=" + month + "&year=" + year + "&edit=" + "&salary_period=1" + "&uniqueID=" + uniqueID;
-    })
+      
+      $("#salary_period_form input[name=day]").val(day);
+      $("#salary_period_form input[name=month]").val(month);
+      $("#salary_period_form input[name=year]").val(year);
+      $("#salary_period_form input[name=person]").val("1");
+      $("#salary_period_form input[name=edit]").val("0");
+      $("#salary_period_form input[name=salary_period]").val("1");
+      $("#salary_period_form input[name=user2]").val(user2);
+
+      $("#salary_period_form").submit();
+
+    });
 
     // Download report
     $("#report").find("button").click( function () {

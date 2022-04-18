@@ -1,11 +1,12 @@
 <?php
 
-  include "functions.php";
+session_start();
 
-  $name   = $_REQUEST["name"];
-  $date   = $_REQUEST["date"];
-  $timers = $_REQUEST["timers"];
-  
-  saveTimers($name, $date, $timers);
+$user   = $_SESSION["user"];
+$date   = $_SESSION["date_today"];
+$timers = $_REQUEST["timers"];
+
+include "functions.php";
+saveTimers($user, $date, $timers);
   
 ?>

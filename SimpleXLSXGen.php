@@ -87,10 +87,10 @@ class SimpleXLSXGen {
 		return $xlsx->addSheet( $rows, $sheetName );
 	}
 
-	public function addSheet( array $rows, $name = null ) {
+	public function addSheet( array $rows, $user = null ) {
 		$this->curSheet++;
 
-		$this->sheets[$this->curSheet] = ['name' => $name ?: 'Sheet'.($this->curSheet+1)];
+		$this->sheets[$this->curSheet] = ['name' => $user ?: 'Sheet'.($this->curSheet+1)];
 
 		if ( is_array( $rows ) && isset( $rows[0] ) && is_array($rows[0]) ) {
 			$this->sheets[$this->curSheet]['rows'] = $rows;

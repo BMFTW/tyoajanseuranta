@@ -1,14 +1,10 @@
-$.getScript("vars_funs.js", function () {
+$(document).ready( function () {
 
-  $(document).ready( function () {
+  var user = $("#user").text();
 
-    $("#get_timers").load("get_timers.php?name=" + user_ + "&date=" + getDate() + "&uniqueID=" + uniqueID, function () {
+  $.getScript("vars_funs.js", function () {
 
-      // Check credentials
-      if ( !userIDs.includes(userID) ) {
-        window.location.href = "login.html";
-        return false;
-      }
+    $("#get_timers").load("get_timers.php", function () {
 
       // Show work tasks
       naytaKaikkienKohteet_index();
@@ -96,7 +92,7 @@ $.getScript("vars_funs.js", function () {
             timers[index] = timer;
 
             timers.push(poissa_sairas_loma);
-            $("#save_timers").load("save_timers.php?name=" + user_ + "&date=" + getDate() + "&timers=" + JSON.stringify(timers));
+            $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers));
             timers.pop();
 
           }
@@ -432,7 +428,7 @@ $.getScript("vars_funs.js", function () {
         }, 1000);
 
         timers.push(poissa_sairas_loma);
-        $("#save_timers").load("save_timers.php?name=" + user_ + "&date=" + getDate() + "&timers=" + JSON.stringify(timers));
+        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers));
         timers.pop();
         
       });
@@ -490,7 +486,7 @@ $.getScript("vars_funs.js", function () {
         poissa_sairas_loma["loma"]   = $(".dropdown-item[data-name=Loma]").hasClass("on")   ? 1 : 0;
 
         timers.push(poissa_sairas_loma);
-        $("#save_timers").load("save_timers.php?name=" + user_ + "&date=" + getDate() + "&timers=" + JSON.stringify(timers));
+        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers));
         timers.pop();
 
       });
@@ -510,46 +506,37 @@ $.getScript("vars_funs.js", function () {
       if ( user == "Riikka Panu" || user == "Heli Rokkonen" || user == "Jarkko Wallenius" )
           $("#fiilismittari_report").show();
 
-      // Cancel
-      $("#cancel").click( function () {
+      // Logout
+      $("#logout").click( function () {
 
-        if ( confirm("Haluatko varmasti peruuttaa ja poistaa päivän tiedot?") ) {
-
-          $("#delete_entry").load("delete_entry.php?name=" + user_ + "&date=" + getDate(), function() {
-            window.location.href = "login.html";
-          });
-
-        }
-
-      });
-
-      // Stats
-      $("#stats").click( function () {
-        window.location.href = "stats.html?userID=" + userID + "&person=1" + "&day=" + day_today + "&month=" + month_today + "&year=" + year_today + "&edit=" + "&uniqueID=" + uniqueID;
+        $("#logout_php").load("logout.php");
+      
       });
 
       // Save
       $("#save").click( function () {
 
-        user_ = user_.replace(/ä/g, "replacethis");
+        var day   = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        var year  = new Date().getFullYear();
 
         // Query string
-        var queryString = "name=" + user_ + "&date=" + getDate();
+        var queryString = "date=" + day + "." + month + "." + year;
 
         // Tasks
-        var tasks = $(".toissa .dropdown-item, .lounastauko").not("#sum");
+        var $tasks = $(".toissa .dropdown-item, .lounastauko").not("#sum");
 
-        tasks.each( function () {
+        $tasks.each( function () {
 
-          task = $(this);
+          $task = $(this);
 
-          if ( task.hasClass("running") )
-            task.click();
+          if ( $task.hasClass("running") )
+            $task.click();
           
-          var task_name = task.data("name");
+          var task_name = $task.data("name");
               task_name = asQueryParameter(task_name);
 
-          var time = task.find(".time").text();
+          var time = $task.find(".time").text();
               time = hms_to_s(time);
 
           queryString += "&" + task_name + "=" + time;
@@ -564,7 +551,7 @@ $.getScript("vars_funs.js", function () {
 
         // Update data
         $("#update_data").load("update_data.php?" + queryString, function() {
-          window.location.href = "stats.html?userID=" + userID + "&person=1" + "&day=" + day_today + "&month=" + month_today + "&year=" + year_today + "&edit=" + "&uniqueID=" + uniqueID;
+          $("#save").submit();
         });
 
       });
