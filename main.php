@@ -69,7 +69,6 @@ if ( !isset( $_SESSION["user"] ) ) {
 
     <body>
 
-
     	<!-- Jumbotron -->
     	<div class = "jumbotron text-center">
     		<img src = "logo.png">
