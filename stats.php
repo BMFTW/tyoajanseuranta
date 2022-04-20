@@ -681,10 +681,31 @@ if ( !isset( $_SESSION["user"] ) ) {
                 </div>
 
             </div>
+
+			<!-- Row 15 -->
+            <div class = "row">
+                      
+                <!-- Työkohde 38 -->
+                <div class = "col-sm-4">
+                    <div id = "tyokohde38">
+						<h3 class = "task"></h3>
+						<h1 class = "time"></h1>
+                    </div>
+                </div>
+
+				<!-- Työkohde 39 -->
+                <div class = "col-sm-4">
+                    <div id = "tyokohde39">
+						<h3 class = "task"></h3>
+						<h1 class = "time"></h1>
+                    </div>
+                </div>
+
+            </div>
 				
 			<hr id = "5">
 		
-			<!-- Row 15 -->
+			<!-- Row 16 -->
 			<div class = "row" id = "liukumavahennys_lounastauko">
 
 				<!-- Liukumavähennys -->
@@ -860,7 +881,7 @@ if ( !isset( $_SESSION["user"] ) ) {
 					<input type = "hidden" name = "day"           value = "<?php echo $_POST["day"] ?>">
 					<input type = "hidden" name = "month"         value = "<?php echo $_POST["month"] ?>">
 					<input type = "hidden" name = "year"          value = "<?php echo $_POST["year"] ?>">
-					<input type = "hidden" name = "person"        value = "2">
+					<input type = "hidden" name = "person"        value = "1">
 					<input type = "hidden" name = "edit"          value = "">
 					<input type = "hidden" name = "salary_period" value = "">
 					<input type = "hidden" name = "user2"         value = "">

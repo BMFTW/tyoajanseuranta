@@ -1,6 +1,6 @@
 // Variables
-var kaikki_kohteet_index = ["Yhteensä", "Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
-var kaikki_kohteet_stats = ["Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
+var kaikki_kohteet_index = ["Yhteensä", "Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "eLOKI", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
+var kaikki_kohteet_stats = ["Töissä", "Tietojärjestelmät - Kehitys", "Tietojärjestelmät - Tuki", "LOVe - Ylläpito", "LOVe - Tuki", "LOVe - Sisällöntuotanto", "Muut verkkokurssit - Tuki", "Muut verkkokurssit - Ylläpito", "Muut verkkokurssit - Sisällöntuotanto", "Muut tuotteet - Kehitys", "Muut tuotteet - Tuki", "eLOKI", "Yhteiset työkalut", "Testaus", "Nettisivut", "Verkkoinfrastruktuuri", "Microsoft 365", "Ruotsinnos", "LAS-ruotsinnos", "GER-ruotsinnos", "NÄYTTÖ", "PSYK", "SYTO", "Sopimukset & tarjoukset", "Sisäinen viestintä", "Sisäiset palaverit", "Asiakasviestintä", "Asiakaspalaverit", "Koulutukset", "Koulutusten valmistelu", "Taloushallinto", "Hallinnointipalvelut", "Henkilöstöhallinto", "Laatutyö", "Laskutettava tuntityö", "Työmatkat", "Happihyppely", "Palkallinen poissaolo", "Liukumavähennys"];
 
 var tyontekijat          = ["Roope Anttila", "Valtteri Anttila", "Heli Haavisto", "Elina Hanslian", "Mirelle Kangas", "Otto Kontio", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Päivi Palonen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Heli Rokkonen", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano", "Jarkko Wallenius"];
 var tuntipalkalliset     = ["Roope Anttila", "Heli Haavisto", "Elina Hanslian", "Simo Korpela", "Eeli Kuosmanen", "Tuukka Monto", "Elisa Mäkinen", "Päivi Palonen", "Riikka Panu", "Hillevi Rautiainen", "Oskari Riihimäki", "Emma Ruotsalainen", "Jaakko Saano", "Kaisa Saano", "Susanna Saano"];
@@ -306,6 +306,7 @@ function naytaKaikkienKohteet_index() {
 	    "Tietojärjestelmät - Tuki",          
       "Muut tuotteet - Kehitys",
 	    "Muut tuotteet - Tuki",
+      "eLOKI",
       "Yhteiset työkalut",
       "Testaus",
       "Nettisivut",
@@ -366,24 +367,24 @@ function naytaKaikkienKohteet_index() {
     
   }
 
-else if ( user == "Päivi Palonen" ) {
+  else if ( user == "Päivi Palonen" ) {
 
-  naytaKohteet_index([
-    "Yhteensä",
-    "LOVe - Ylläpito",
-    "LOVe - Tuki",
-    "LOVe - Sisällöntuotanto",
-    "Muut verkkokurssit - Ylläpito",
-    "Muut verkkokurssit - Tuki",
-    "Muut verkkokurssit - Sisällöntuotanto",
-    "Muut tuotteet - Kehitys",
-    "Muut tuotteet - Tuki",
-    "Testaus",
-    "Sisäiset palaverit",
-    "Happihyppely",
-    "Palkallinen poissaolo",
-    "Liukumavähennys"
-  ]);
+    naytaKohteet_index([
+      "Yhteensä",
+      "LOVe - Ylläpito",
+      "LOVe - Tuki",
+      "LOVe - Sisällöntuotanto",
+      "Muut verkkokurssit - Ylläpito",
+      "Muut verkkokurssit - Tuki",
+      "Muut verkkokurssit - Sisällöntuotanto",
+      "Muut tuotteet - Kehitys",
+      "Muut tuotteet - Tuki",
+      "eLOKI",
+      "Testaus",
+      "Sisäiset palaverit",
+      "Happihyppely",
+      "Palkallinen poissaolo"
+    ]);
 
 } 
 
@@ -449,6 +450,7 @@ else if ( user == "Päivi Palonen" ) {
       "Muut verkkokurssit - Sisällöntuotanto",
       "Muut tuotteet - Kehitys",
   	  "Muut tuotteet - Tuki",
+      "eLOKI",
       "Yhteiset työkalut",
       "Testaus",
       "Sopimukset & tarjoukset",
@@ -529,6 +531,7 @@ else if ( user == "Päivi Palonen" ) {
       "Muut verkkokurssit - Sisällöntuotanto",
       "Muut tuotteet - Kehitys",
 	    "Muut tuotteet - Tuki",
+      "eLOKI",
       "Yhteiset työkalut",
       "Testaus",
       "Nettisivut",
@@ -716,6 +719,7 @@ function naytaKaikkienKohteet_stats() {
       "Tietojärjestelmät - Tuki",          
       "Muut tuotteet - Kehitys",
       "Muut tuotteet - Tuki",
+      "eLOKI",
       "Yhteiset työkalut",
       "Testaus",
       "Nettisivut",
@@ -788,11 +792,11 @@ function naytaKaikkienKohteet_stats() {
       "Muut verkkokurssit - Sisällöntuotanto",
       "Muut tuotteet - Kehitys",
       "Muut tuotteet - Tuki",
+      "eLOKI",
       "Testaus",
       "Sisäiset palaverit",
       "Happihyppely",
-      "Palkallinen poissaolo",
-      "Liukumavähennys"
+      "Palkallinen poissaolo"
     ]);
 
   }
@@ -858,6 +862,7 @@ function naytaKaikkienKohteet_stats() {
       "Muut verkkokurssit - Sisällöntuotanto",
       "Muut tuotteet - Kehitys",
       "Muut tuotteet - Tuki",
+      "eLOKI",
       "Yhteiset työkalut",
       "Testaus",
       "Sopimukset & tarjoukset",
@@ -937,6 +942,7 @@ function naytaKaikkienKohteet_stats() {
       "Muut verkkokurssit - Sisällöntuotanto",
       "Muut tuotteet - Kehitys",
       "Muut tuotteet - Tuki",
+      "eLOKI",
       "Yhteiset työkalut",
       "Testaus",
       "Nettisivut",

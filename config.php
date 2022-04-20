@@ -25,6 +25,7 @@ $tyokohteet = [
     "muut_verkkokurssit_sisallontuotanto",
     "muut_tuotteet_tuki",
     "muut_tuotteet_kehitys",
+    "eloki",
     "yhteiset_tyokalut",
     "testaus",
     "nettisivut",

@@ -122,6 +122,7 @@ if ( !isset( $_SESSION["user"] ) ) {
 							<h5 class = "dropdown-header">Muut tuotteet</h5>
 							<a class = "dropdown-item" data-name = "Muut tuotteet - Kehitys"> Kehitys <span class = "time"></span> </a>
 							<a class = "dropdown-item" data-name = "Muut tuotteet - Tuki">    Tuki    <span class = "time"></span> </a>
+							<a class = "dropdown-item" data-name = "eLOKI">                   eLOKI   <span class = "time"></span> </a>
 	
 							<div class = "dropdown-divider"></div>
 	
