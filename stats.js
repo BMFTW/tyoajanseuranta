@@ -92,6 +92,7 @@ $(document).ready(function () {
       $("#person").append( new Option( "Simo Korpela"      ) );
       $("#person").append( new Option( "Eeli Kuosmanen"    ) );
       $("#person").append( new Option( "Elisa Mäkinen"     ) );
+      $("#person").append( new Option( "Päivi Palonen"     ) );
       $("#person").append( new Option( "Oskari Riihimäki"  ) );
       $("#person").append( new Option( "Emma Ruotsalainen" ) );
       
@@ -117,22 +118,23 @@ $(document).ready(function () {
       $("#person").append( new Option("-----------------------", "sep") );
       $("#person").find("option[value=sep]").prop("disabled", true);
 
-      $("#person").append( new Option( "Roope Anttila",     "594585"  ) );
-      $("#person").append( new Option( "Valtteri Anttila",  "3358000" ) );
-      $("#person").append( new Option( "Heli Haavisto",     "1719150" ) );
-      $("#person").append( new Option( "Elina Hanslian",    "2294025" ) );
-      $("#person").append( new Option( "Mirelle Kangas",    "1776090" ) );
-      $("#person").append( new Option( "Otto Kontio",       "2420680" ) );
-      $("#person").append( new Option( "Simo Korpela",      "928560"  ) );
-      $("#person").append( new Option( "Eeli Kuosmanen",    "2565585" ) );
-      $("#person").append( new Option( "Tuukka Monto",      "2353520" ) );
-      $("#person").append( new Option( "Elisa Mäkinen",     "3300695" ) );
-      $("#person").append( new Option( "Riikka Panu",       "113515"  ) );
-      $("#person").append( new Option( "Oskari Riihimäki",  "815775"  ) );
-      $("#person").append( new Option( "Heli Rokkonen",     "3559115" ) );
-      $("#person").append( new Option( "Emma Ruotsalainen", "913230"  ) );
-      $("#person").append( new Option( "Jaakko Saano",      "2913065" ) );
-      $("#person").append( new Option( "Kaisa Saano",       "1334440" ) );
+      $("#person").append( new Option( "Roope Anttila"     ) );
+      $("#person").append( new Option( "Valtteri Anttila"  ) );
+      $("#person").append( new Option( "Heli Haavisto"     ) );
+      $("#person").append( new Option( "Elina Hanslian"    ) );
+      $("#person").append( new Option( "Mirelle Kangas"    ) );
+      $("#person").append( new Option( "Otto Kontio"       ) );
+      $("#person").append( new Option( "Simo Korpela"      ) );
+      $("#person").append( new Option( "Eeli Kuosmanen"    ) );
+      $("#person").append( new Option( "Tuukka Monto"      ) );
+      $("#person").append( new Option( "Elisa Mäkinen"     ) );
+      $("#person").append( new Option( "Päivi Palonen"     ) );
+      $("#person").append( new Option( "Riikka Panu"       ) );
+      $("#person").append( new Option( "Oskari Riihimäki"  ) );
+      $("#person").append( new Option( "Heli Rokkonen"     ) );
+      $("#person").append( new Option( "Emma Ruotsalainen" ) );
+      $("#person").append( new Option( "Jaakko Saano"      ) );
+      $("#person").append( new Option( "Kaisa Saano"       ) );
       
     }
 

@@ -65,6 +65,7 @@ $tuntipalkalliset = array (
     "Eeli Kuosmanen",
     "Tuukka Monto",
     "Elisa Mäkinen",
+    "Päivi Palonen",
     "Riikka Panu",
     "Hillevi Rautiainen",
     "Oskari Riihimäki",

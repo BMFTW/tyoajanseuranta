@@ -16,6 +16,7 @@ if ( $count == "1" ) {
     $user = str_replace("@awanic.fi", "", $user);
     $user = str_replace(".", " ", $user);
     $user = str_replace("makinen", "mäkinen", $user);
+    $user = str_replace("paivi", "päivi", $user);
     $user = str_replace("riihimaki", "riihimäki", $user);
     $user = ucwords($user);
 
