@@ -44,13 +44,16 @@ if ( isset( $_SESSION["user"] ) ) {
   
     <!-- Login -->
     <div class = "container">
-      <div class = "col-sm-4" style = "margin: 0 auto;">
-        <h2>Kirjaudu sisään</h2>
+      <div class = "col-md-4" style = "margin: 0 auto;">
+        <h2 style = "margin-bottom: 15px">Kirjaudu sisään</h2>
           <label for = "email">Käyttäjätunnus:</label>
           <input class = "form-control" id = "email" placeholder = "Anna käyttäjätunnus"> <br>
           <label for = "pwd">Salasana:</label>
           <input class = "form-control" id = "pwd" placeholder = "Anna salasana" autocomplete = "off"> <br>
-          <button id = "login" class = "btn btn-success ">Kirjaudu</button>
+      <div>
+      <div class = "col-md-4 text_center" style = "margin: 0 auto;">
+          <button id = "login" class = "btn btn-success">Kirjaudu</button>
+      </div> 
       </div> 
     </div>
 
