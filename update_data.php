@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include("config.php");
 
 $user   = $_SESSION["user"];
 
@@ -51,7 +51,27 @@ $timers = isset($_REQUEST["timers"]) ? $_REQUEST["timers"] : "";
 
 $times = [ $time1, $time2, $time3, $time4, $time5, $time6, $time7, $time8, $time9, $time10, $time11, $time12, $time13, $time14, $time15, $time16, $time17, $time18, $time19, $time20, $time21, $time22, $time23, $time24, $time25, $time26, $time27, $time28, $time29, $time30, $time31, $time32, $time33, $time34, $time35, $time36, $time37, $time38, $time39] ;
 
-include "functions.php";
-updateData($user, $date, $times, $poissa, $sairas, $loma, $timers);
-  
+$sql = "SELECT * FROM $table WHERE nimi = ? AND pvm = ?";
+
+$result = $conn -> prepare($sql);
+$result -> execute([$user, $date]);
+$result = $result -> fetch();
+
+if ( empty($result) ) {
+
+$sql_insert = "INSERT INTO $table (nimi, pvm, " . implode(", ", $tyokohteet) . ", poissa, sairas, loma, timers) VALUES (?, ?, " . str_repeat( "0, ", count($tyokohteet) + 3 ) . "?)";
+$conn -> prepare($sql_insert) -> execute([$user, $date, $timers]);
+
+}
+
+$sql = "UPDATE $table SET ";
+
+for ( $i = 0; $i < count($tyokohteet); $i++ ) {
+    $sql .= $tyokohteet[$i] . " = " . strval($times[$i])  . ", ";
+}
+
+$sql .= "poissa = $poissa, sairas = $sairas, loma = $loma WHERE nimi = ? AND pvm = ?";
+
+$conn -> prepare($sql) -> execute([$user, $date]);
+ 
 ?>
