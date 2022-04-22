@@ -4,7 +4,7 @@ $(document).ready( function () {
 
   $.getScript("vars_funs.js", function () {
 
-    $("#get_timers").load("get_timers.php", function () {
+    $("#get_timers").load("get_timers.php" + "?uniqueID=" + uniqueID, function () {
 
       // Show work tasks
       naytaKaikkienKohteet_index();
@@ -92,7 +92,7 @@ $(document).ready( function () {
             timers[index] = timer;
 
             timers.push(poissa_sairas_loma);
-            $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers));
+            $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&uniqueID=" + uniqueID);
             timers.pop();
 
           }
@@ -428,7 +428,7 @@ $(document).ready( function () {
         }, 1000);
 
         timers.push(poissa_sairas_loma);
-        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers));
+        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&uniqueID=" + uniqueID);
         timers.pop();
         
       });
@@ -486,7 +486,7 @@ $(document).ready( function () {
         poissa_sairas_loma["loma"]   = $(".dropdown-item[data-name=Loma]").hasClass("on")   ? 1 : 0;
 
         timers.push(poissa_sairas_loma);
-        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers));
+        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&uniqueID=" + uniqueID);
         timers.pop();
 
       });
@@ -550,7 +550,7 @@ $(document).ready( function () {
         queryString += "&poissa=" + poissa + "&sairas=" + sairas + "&loma=" + loma;
 
         // Update data
-        $("#update_data").load("update_data.php?" + queryString, function() {
+        $("#update_data").load("update_data.php?" + queryString + "&uniqueID=" + uniqueID, function() {
           $("#save").submit();
         });
 

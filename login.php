@@ -1,5 +1,7 @@
 <?php
 
+session_cache_limiter("nocache");
+
 session_start();
 
 if ( isset( $_SESSION["user"] ) ) {
