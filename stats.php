@@ -274,7 +274,7 @@ if ( !isset( $_SESSION["user"] ) ) {
 
 					<div class = "col-md-12">
 
-						<button type = "submit" form = "show_form" id = "show" class = "btn btn-info">Suodata</button>
+						<button type = "submit" form = "show_form" id = "show" class = "btn btn-info">Näytä</button>
 						
 						<form method = "post" id = "show_form" action = "stats.php">
 
