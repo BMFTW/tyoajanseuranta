@@ -1,6 +1,10 @@
 <?php
 
-session_cache_limiter("nocache");
+// Server should keep session data for AT LEAST 12 hours
+ini_set('session.gc_maxlifetime', 43200);
+
+// Each client should remember their session id for EXACTLY 12 hours
+session_set_cookie_params(43200);
 
 session_start();
 
