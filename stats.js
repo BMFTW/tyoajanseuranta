@@ -1468,6 +1468,9 @@ $(document).ready(function () {
             window.location.href = "download.php?file=tyotunnit_" + month + "_" + year + ".xlsx";
           else
             window.location.href = "download.php?file=tyotunnit_" + next_month + "_" + next_year + ".xlsx";
+
+          // Change user
+          // chown -R www-data:www-data /var/www/awanic.com/var/www/tyoaika
             
         });
 
