@@ -14,8 +14,6 @@ var holidays_2022        = ["6.1.2022", "15.4.2022", "18.4.2022", "26.5.2022", "
 var holidays             = holidays_2021.concat(holidays_2022);
     holidays             = holidays.map( date => asDate(date) ).map( date => date.getTime() );
 
-var uniqueID             = new Date().getTime();
-
 var green                = "#28a745";
 var yellow               = "#ffc107";
 

@@ -185,7 +185,7 @@ $(document).ready(function () {
     // -------------------------------------------------------------------------------------
 
     // Get stats
-    $("#times_data").load("get_stats.php?day=" + day + "&month=" + month + "&year=" + year + "&person=" + person + "&salary_period=" + salary_period + "&user2=" + user_2 + "&uniqueID=" + uniqueID, function () {
+    $("#times_data").load("get_stats.php?day=" + day + "&month=" + month + "&year=" + year + "&person=" + person + "&salary_period=" + salary_period + "&user2=" + user_2 + "&uniqueID=" + new Date().getTime(), function () {
      
       var times = $(this).text();
 
@@ -321,7 +321,7 @@ $(document).ready(function () {
 
         var date_end = day + "." + month + "." + year;
 
-        $("#liukuma").load("liukuma.php?date_start=" + date_start + "&date_end=" + date_end + "&user2=" + user_2 + "&uniqueID=" + uniqueID, function() {
+        $("#liukuma").load("liukuma.php?date_start=" + date_start + "&date_end=" + date_end + "&user2=" + user_2 + "&uniqueID=" + new Date().getTime(), function() {
 
           var input = $(this).text();
           
@@ -366,7 +366,7 @@ $(document).ready(function () {
         date_yesterday.setDate( date_yesterday.getDate() - 1 );
         date_yesterday = date_yesterday.getDate() + "." + ( date_yesterday.getMonth() + 1 ) + "." + date_yesterday.getFullYear();
 
-        $("#liukuma_edellinen").load("liukuma.php?date_start=" + date_start + "&date_end=" + date_yesterday + "&user2=" + user_2 + "&uniqueID=" + uniqueID, function() {
+        $("#liukuma_edellinen").load("liukuma.php?date_start=" + date_start + "&date_end=" + date_yesterday + "&user2=" + user_2 + "&uniqueID=" + new Date().getTime(), function() {
 
           var input = $(this).text();
           
@@ -592,7 +592,7 @@ $(document).ready(function () {
           $("#chart1").hide();
           $("#chart2").show();
   
-          $("#chart2_data").load("chart2.php?day=" + day + "&month=" + month + "&year=" + year + "&user2=" + user_2 + "&uniqueID=" + uniqueID, function () {
+          $("#chart2_data").load("chart2.php?day=" + day + "&month=" + month + "&year=" + year + "&user2=" + user_2 + "&uniqueID=" + new Date().getTime(), function () {
   
             var times = $(this).text();
   
@@ -1295,7 +1295,7 @@ $(document).ready(function () {
       queryString += "&timers=" + JSON.stringify(timers);
       
       // Update data
-      $("#update_data").load("update_data.php?" + queryString + "&uniqueID=" + uniqueID, function() {
+      $("#update_data").load("update_data.php?" + queryString + "&uniqueID=" + new Date().getTime(), function() {
         
         $("#save_edits_form input[name=day]").val(day);
         $("#save_edits_form input[name=month]").val(month);
@@ -1399,7 +1399,7 @@ $(document).ready(function () {
       // Liukumasaldot
       date_start = "26.4.2021";
     
-      $("#liukumat_data").load("liukumat.php?date_start=" + date_start + "&date_end=" + date_end + "&uniqueID=" + uniqueID, function() {
+      $("#liukumat_data").load("liukumat.php?date_start=" + date_start + "&date_end=" + date_end + "&uniqueID=" + new Date().getTime(), function() {
 
         var input = $(this).text();
           
@@ -1456,7 +1456,7 @@ $(document).ready(function () {
   
         }
 
-        $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&holidays=" + holidays.join(",") + "&liukumat=" + liukumat + "&uniqueID=" + uniqueID, function() {
+        $("#report_data").load("report.php?day=" + day + "&month=" + month + "&year=" + year + "&num_work_days=" + num_work_days + "&holidays=" + holidays.join(",") + "&liukumat=" + liukumat + "&uniqueID=" + new Date().getTime(), function() {
 
           // February & March 2022 exceptions
           if ( day <= 23 && month == 2 && year == 2022 )
