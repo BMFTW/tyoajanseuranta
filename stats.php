@@ -128,7 +128,7 @@ if ( !isset( $_SESSION["user"] ) ) {
         <div class = "jumbotron text-center" id = "header">
             <img src = "logo.png">
             <h5>Työajanseurantajärjestelmä</h5>
-            <?php echo $_SESSION["user"] . " - " . $_SESSION["date_today"]; ?>
+            <?php echo $_SESSION["user"] . " - " . date("j.n.Y"); ?>
         </div>
     
 		<!-- Menu -->

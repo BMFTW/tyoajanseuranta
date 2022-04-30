@@ -20,8 +20,7 @@ if ( $count == "1" ) {
     $user = str_replace("riihimaki", "riihimäki", $user);
     $user = ucwords($user);
 
-    $_SESSION["user"]       = $user;
-    $_SESSION["date_today"] = date("j.n.Y");
+    $_SESSION["user"] = $user;
 
     echo "<script>location.href='main.php'</script>";
 

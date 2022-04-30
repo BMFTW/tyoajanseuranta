@@ -3,7 +3,7 @@
 include("config.php");
 
 $user = $_SESSION["user"];
-$date = $_SESSION["date_today"];
+$date = date("j.n.Y");
 
 if ( $user == "" || $user == "undefined" ) {
     return false;

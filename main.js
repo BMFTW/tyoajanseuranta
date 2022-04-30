@@ -1,6 +1,7 @@
 $(document).ready( function () {
 
-  var user = $("#user").text();
+  var user  = $("#user").text();
+  var user_ = user.replace(" ", "_");
 
   $.getScript("vars_funs.js", function () {
 
@@ -92,7 +93,7 @@ $(document).ready( function () {
             timers[index] = timer;
 
             timers.push(poissa_sairas_loma);
-            $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&uniqueID=" + new Date().getTime());
+            $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&user=" + user_ + "&uniqueID=" + new Date().getTime());
             timers.pop();
 
           }
@@ -428,7 +429,7 @@ $(document).ready( function () {
         }, 1000);
 
         timers.push(poissa_sairas_loma);
-        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&uniqueID=" + new Date().getTime());
+        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&user=" + user_ + "&uniqueID=" + new Date().getTime());
         timers.pop();
         
       });
@@ -486,7 +487,7 @@ $(document).ready( function () {
         poissa_sairas_loma["loma"]   = $(".dropdown-item[data-name=Loma]").hasClass("on")   ? 1 : 0;
 
         timers.push(poissa_sairas_loma);
-        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&uniqueID=" + new Date().getTime());
+        $("#save_timers").load("save_timers.php?timers=" + JSON.stringify(timers) + "&user=" + user_ + "&uniqueID=" + new Date().getTime());
         timers.pop();
 
       });
@@ -521,7 +522,7 @@ $(document).ready( function () {
         var year  = new Date().getFullYear();
 
         // Query string
-        var queryString = "date=" + day + "." + month + "." + year;
+        var queryString = "user=" + user_ + "&date=" + day + "." + month + "." + year;
 
         // Tasks
         var $tasks = $(".toissa .dropdown-item, .lounastauko").not("#sum");

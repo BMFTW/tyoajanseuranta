@@ -2,11 +2,12 @@
 
 include("config.php");
 
-$user   = $_SESSION["user"];
-$date   = $_SESSION["date_today"];
 $timers = $_REQUEST["timers"];
 
+$user = $_REQUEST["user"];
 $user = str_replace("_", " ", $user);
+
+$date = date("j.n.Y");
 
 $sql = "UPDATE $table SET timers = ? WHERE nimi = ? AND pvm = ?";
 

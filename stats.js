@@ -2,7 +2,8 @@
 
 $(document).ready(function () {
 
-  var user = $("#user").text();
+  var user  = $("#user").text();
+  var user_ = user.replace(" ", "_")
 
   $.getScript("vars_funs.js", function() {
 
@@ -1207,7 +1208,7 @@ $(document).ready(function () {
       timers = JSON.parse(timers);
 
       // Query string
-      var queryString = "date=" + date;
+      var queryString = "user=" + user_ + "&date=" + date;
       
       $("div[id^=tyokohde], #liukumavahennys, #lounastauko").each( function() {
         

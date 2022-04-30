@@ -2,7 +2,8 @@
 
 include("config.php");
 
-$user   = $_SESSION["user"];
+$user = $_REQUEST["user"];
+$user = str_replace("_", " ", $user);
 
 $date   = $_REQUEST["date"];
 $time1  = $_REQUEST["toissa"];
