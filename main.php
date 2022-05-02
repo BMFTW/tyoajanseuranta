@@ -237,7 +237,7 @@ if ( !isset( $_SESSION["user"] ) ) {
 
 				<form method = "post" id = "stats_form" action = "stats.php">
 
-					<input type = "hidden" name = "day"           value = "<?php echo date('d'); ?>">
+					<input type = "hidden" name = "day"           value = "<?php echo date('j'); ?>">
 					<input type = "hidden" name = "month"         value = "<?php echo date('n'); ?>">
 					<input type = "hidden" name = "year"          value = "<?php echo date('Y'); ?>">
 					<input type = "hidden" name = "person"        value = "1">
@@ -249,7 +249,7 @@ if ( !isset( $_SESSION["user"] ) ) {
 
 				<form method = "post" id = "save_form" action = "stats.php">
 
-					<input type = "hidden" name = "day"           value = "<?php echo date('d'); ?>">
+					<input type = "hidden" name = "day"           value = "<?php echo date('j'); ?>">
 					<input type = "hidden" name = "month"         value = "<?php echo date('n'); ?>">
 					<input type = "hidden" name = "year"          value = "<?php echo date('Y'); ?>">
 					<input type = "hidden" name = "person"        value = "1">
