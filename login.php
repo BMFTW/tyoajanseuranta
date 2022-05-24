@@ -69,6 +69,17 @@ if ( isset( $_SESSION["user"] ) ) {
 
       $(document).ready( function () {
 
+        // Press Enter to login
+        $(document).keyup( function(e) {
+
+          if ( e.key == "Enter" ) {
+
+            $("#login").click();
+
+          }
+
+        });
+
         $("#login").click( function () {
 
           var user = $("#email").val();
