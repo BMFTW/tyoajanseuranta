@@ -1,11 +1,9 @@
 <?php
 
-// Server should keep session data for AT LEAST 12 hours
-ini_set('session.gc_maxlifetime', 43200);
+// Session timeout
+ini_set("session.gc_maxlifetime", 43200);
 
-// Each client should remember their session id for EXACTLY 12 hours
-session_set_cookie_params(43200);
-
+// Start Session
 session_start();
 
 if ( isset( $_SESSION["user"] ) ) {

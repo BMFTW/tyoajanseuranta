@@ -3,3 +3,4 @@ deny from all
 allow from 83.150.84
 allow from 195.156.62
 DirectoryIndex login.php
+php_value session.save_path "/var/www/awanic.com/var/www/sessions"
