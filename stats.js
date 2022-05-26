@@ -94,7 +94,6 @@ $(document).ready(function () {
       $("#person").append( new Option( "Eeli Kuosmanen"    ) );
       $("#person").append( new Option( "Elisa Mäkinen"     ) );
       $("#person").append( new Option( "Päivi Palonen"     ) );
-      $("#person").append( new Option( "Oskari Riihimäki"  ) );
       $("#person").append( new Option( "Emma Ruotsalainen" ) );
       
     }
@@ -109,8 +108,8 @@ $(document).ready(function () {
       $("#person").append( new Option( "Heli Haavisto",    "1719150" ) );
       $("#person").append( new Option( "Elina Hanslian",   "2294025" ) );
       $("#person").append( new Option( "Tuukka Monto",     "2353520" ) );
-      $("#person").append( new Option( "Kaisa Saano",      "1334440" ) );
       $("#person").append( new Option( "Jaakko Saano",     "2913065" ) );
+      $("#person").append( new Option( "Kaisa Saano",      "1334440" ) );
       
     }
 
@@ -131,7 +130,6 @@ $(document).ready(function () {
       $("#person").append( new Option( "Elisa Mäkinen"     ) );
       $("#person").append( new Option( "Päivi Palonen"     ) );
       $("#person").append( new Option( "Riikka Panu"       ) );
-      $("#person").append( new Option( "Oskari Riihimäki"  ) );
       $("#person").append( new Option( "Heli Rokkonen"     ) );
       $("#person").append( new Option( "Emma Ruotsalainen" ) );
       $("#person").append( new Option( "Jaakko Saano"      ) );
