@@ -20,16 +20,6 @@ $(document).ready(function () {
     salary_period = salary_period == "" ? "0" : salary_period;
     user2         = user2.trim() == "" ? "0" : user2.replace("_", " ");
 
-    console.log("day: " + day);
-    console.log("month: " + month);
-    console.log("year: " + year);
-    console.log("person: " + person);
-    console.log("edit: " + edit);
-    console.log("salary_period: " + salary_period);
-    console.log("user2: " + user2);
-
-    console.log("----------------------------------------------------------------");
-
     // -------------------------------------------------------------------------------------
 
     var day_copy = day;
