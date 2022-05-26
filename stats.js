@@ -156,7 +156,7 @@ $(document).ready(function () {
       user   = user2;
       user_2 = user2.replace(" ", "_");
 
-      naytaKaikkienKohteet_stats();
+      naytaKohteet_stats(kaikki_kohteet_stats);
 
       $("#user").text(user2);
       $("#person").find("option:contains(" + user2 + ")").prop("selected", true);
