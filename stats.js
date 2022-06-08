@@ -94,13 +94,13 @@ $(document).ready(function () {
       $("#person").append( new Option("-----------------------", "sep") );
       $("#person").find("option[value=sep]").prop("disabled", true);
 
-      $("#person").append( new Option( "Roope Anttila",    "594585"  ) );
-      $("#person").append( new Option( "Valtteri Anttila", "3358000" ) );
-      $("#person").append( new Option( "Heli Haavisto",    "1719150" ) );
-      $("#person").append( new Option( "Elina Hanslian",   "2294025" ) );
-      $("#person").append( new Option( "Tuukka Monto",     "2353520" ) );
-      $("#person").append( new Option( "Jaakko Saano",     "2913065" ) );
-      $("#person").append( new Option( "Kaisa Saano",      "1334440" ) );
+      $("#person").append( new Option( "Roope Anttila"    ) );
+      $("#person").append( new Option( "Valtteri Anttila" ) );
+      $("#person").append( new Option( "Heli Haavisto"    ) );
+      $("#person").append( new Option( "Elina Hanslian"   ) );
+      $("#person").append( new Option( "Tuukka Monto"     ) );
+      $("#person").append( new Option( "Jaakko Saano"     ) );
+      $("#person").append( new Option( "Kaisa Saano"      ) );
       
     }
 
