@@ -85,6 +85,7 @@ $(document).ready(function () {
       $("#person").append( new Option( "Elisa Mäkinen"     ) );
       $("#person").append( new Option( "Päivi Palonen"     ) );
       $("#person").append( new Option( "Emma Ruotsalainen" ) );
+      $("#person").append( new Option( "Kaisa Saano"       ) );
       
     }
 
