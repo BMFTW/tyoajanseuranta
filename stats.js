@@ -1459,7 +1459,7 @@ $(document).ready(function () {
           else
             window.location.href = "download.php?file=tyotunnit_" + next_month + "_" + next_year + ".xlsx";
 
-          // Change user
+          // Change ownership
           // chown -R www-data:www-data /var/www/awanic.com/var/www/tyoaika
             
         });
