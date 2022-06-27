@@ -57,7 +57,7 @@ $sql_tyoajat = "
     SELECT 
         TBL1.nimi, COALESCE( SUM( " . implode(" + ", $TBL2_tyokohteet_tyoaikaaNostattavat) . " ), 0 ) AS tyoaika
     FROM 
-        ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+        ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
     LEFT JOIN	
         ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND poissa != 1 AND loma != 1 ) AS TBL2
     ON 
@@ -79,7 +79,7 @@ $sql_poissa_sairas_loma_lkm = "
             SELECT 
             TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
             FROM 
-            ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+            ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
             LEFT JOIN 
             (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) ) AS TBL2
             ON 
@@ -92,7 +92,7 @@ $sql_poissa_sairas_loma_lkm = "
             SELECT 
             TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas, COALESCE( SUM(TBL2.loma), 0 ) AS loma
             FROM 
-            ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+            ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
             LEFT JOIN             
             (SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) IN ('Saturday', 'Sunday') ) AS TBL2
             ON 

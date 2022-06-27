@@ -10,7 +10,7 @@ $sql_sum = "
 SELECT
     TBL1.nimi, COALESCE( SUM(" . implode(" + ", $TBL2_tyokohteet_tyoaikaaNostattavat) . "), 0 ) AS sum
 FROM 
-    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
 LEFT JOIN	
     ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND poissa != 1 AND loma != 1 ) AS TBL2
 ON 
@@ -27,7 +27,7 @@ $sql_poissa = "
 SELECT 
     TBL1.nimi, COALESCE( SUM(TBL2.poissa), 0 ) AS poissa
 FROM 
-    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
 LEFT JOIN 
     ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) NOT IN ('Saturday', 'Sunday') ) AS TBL2
 ON 
@@ -44,7 +44,7 @@ $sql_sairas = "
 SELECT 
     TBL1.nimi, COALESCE( SUM(TBL2.sairas), 0 ) AS sairas
 FROM 
-    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
 LEFT JOIN 
     ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) NOT IN ('Saturday', 'Sunday') ) AS TBL2
 ON 
@@ -61,7 +61,7 @@ $sql_loma = "
 SELECT 
     TBL1.nimi, COALESCE( SUM(TBL2.loma), 0 ) AS loma
 FROM 
-    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' ) AS TBL1
+    ( SELECT DISTINCT nimi FROM $table WHERE nimi != 'Oskari Riihimäki' AND nimi != 'Heli Rokkonen' ) AS TBL1
 LEFT JOIN 
     ( SELECT * FROM $table WHERE CONVERT(DATETIME, pvm, 104) >= CONVERT(DATETIME, ?, 104) AND CONVERT(DATETIME, pvm, 104) <= CONVERT(DATETIME, ?, 104) AND DATENAME(WEEKDAY, CONVERT(DATETIME, pvm, 104)) NOT IN ('Saturday', 'Sunday') ) AS TBL2
 ON 
