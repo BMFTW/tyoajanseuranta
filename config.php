@@ -4,11 +4,11 @@ if ( session_status() === PHP_SESSION_NONE ) {
     session_start();
 }
 
-$server  = "83.150.87.73";
-$db      = "master";
-$db_user = "haipro";
-$db_pwd  = "haipro";
-$table   = "tyoajanseuranta";
+$server  = "XXX";
+$db      = "XXX";
+$db_user = "XXX";
+$db_pwd  = "XXX";
+$table   = "XXX";
 
 $conn = new PDO("sqlsrv:Server=$server;Database=$db", $db_user, $db_pwd);
 
